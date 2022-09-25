@@ -6,6 +6,7 @@ using PlayFab.ClientModels;
 using System;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class PlayfabAuth : MonoBehaviour
 {
@@ -69,6 +70,8 @@ public class PlayfabAuth : MonoBehaviour
         PlayerPrefs.SetString("password", logInRequest.Password);
         PlayerPrefs.Save();
 
-        MainLoobyManager.lobbyManager.ConnectToMaster();
+        SceneManager.LoadScene("Lobby");
+
+        //MainLoobyManager.lobbyManager.ConnectToMaster();
     }
 }

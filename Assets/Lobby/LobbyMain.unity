@@ -183,7 +183,7 @@ GameObject:
   - component: {fileID: 820640299}
   - component: {fileID: 820640298}
   m_Layer: 0
-  m_Name: LobbyManager
+  m_Name: Disabled _ LobbyManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -196,7 +196,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 820640297}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3192fd0b004357e48b601701b975dd06, type: 3}
   m_Name: 
