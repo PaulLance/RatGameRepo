@@ -19,6 +19,8 @@ public class PlayfabAuth : MonoBehaviour
     private void Start()
     {
         logInUI = FindObjectOfType<LogInUI>();
+        logInUI.LogInUserName.text = PlayerPrefs.GetString("username");
+        logInUI.LogInPassword.text = PlayerPrefs.GetString("password");
     }
 
     public void LogIn()
@@ -61,6 +63,12 @@ public class PlayfabAuth : MonoBehaviour
     {
         IsAuthenticated = true;
         logInUI.DisactiveAllForms();
+        
+        Debug.Log("Username : " + logInRequest.Username);
+        PlayerPrefs.SetString("username", logInRequest.Username);
+        PlayerPrefs.SetString("password", logInRequest.Password);
+        PlayerPrefs.Save();
+
         MainLoobyManager.lobbyManager.ConnectToMaster();
     }
 }

@@ -45,7 +45,7 @@ public class Launcher : MonoBehaviourPunCallbacks
             menu.inputField.placeholder.GetComponent<TextMeshProUGUI>().text = "This name already exists";
             return;
         }
-        PhotonNetwork.CreateRoom(menu.inputField.text, new Photon.Realtime.RoomOptions { MaxPlayers = 2, EmptyRoomTtl = 0 });
+        PhotonNetwork.CreateRoom(menu.inputField.text, new Photon.Realtime.RoomOptions { MaxPlayers = 8, EmptyRoomTtl = 0 });
         Menu.menu.CloseCreateRoomMenu();
         Menu.menu.OpenLoadMenu();
     }
