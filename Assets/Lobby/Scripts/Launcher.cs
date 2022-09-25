@@ -17,7 +17,10 @@ public class Launcher : MonoBehaviourPunCallbacks
         menu = FindObjectOfType<Menu>();
         menu.LoadMenu();
         PhotonNetwork.ConnectUsingSettings();
-        PhotonNetwork.NickName = "Player " + UnityEngine.Random.Range(0, 1000);
+
+        string username = PlayerPrefs.GetString("username", "Player " + UnityEngine.Random.Range(0, 1000));
+
+        PhotonNetwork.NickName = username;
         PhotonNetwork.GameVersion = "1";
         PhotonNetwork.AutomaticallySyncScene = true;
     }
