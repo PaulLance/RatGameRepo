@@ -93,6 +93,10 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public void StartGame()
     {
+        if (!PhotonNetwork.IsMasterClient)
+        {
+
+        }
         PhotonNetwork.LoadLevel(2);
     }
 
