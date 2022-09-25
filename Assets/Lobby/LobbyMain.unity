@@ -648,6 +648,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LogInOrRegisterCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 2300768642366575837, guid: fd182f7b02cbb7a478dbc8196afb4d85, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2300768642431363538, guid: fd182f7b02cbb7a478dbc8196afb4d85, type: 3}
       propertyPath: m_VerticalAlignment
       value: 512
