@@ -43,6 +43,9 @@ MonoBehaviour:
   - CantHearYou
   - ChangeColour
   - HeresWhy
+  - SetupCheese
+  - SetupDone
+  - DoSetup
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

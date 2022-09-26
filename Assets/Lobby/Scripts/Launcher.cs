@@ -97,7 +97,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         {
 
         }
-        PhotonNetwork.LoadLevel(2);
+        PhotonNetwork.LoadLevel("MainGame");
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)

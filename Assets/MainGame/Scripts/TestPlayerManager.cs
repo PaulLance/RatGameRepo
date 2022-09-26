@@ -18,6 +18,7 @@ public class TestPlayerManager : MonoBehaviourPunCallbacks, IPunObservable
     private GameObject beams;
     //True, when the user is firing
     bool IsFiring;
+    public MainGameManager.PlayerType playerType;
     #endregion
 
     #region MonoBehaviour CallBacks
