@@ -11,6 +11,7 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
 {
     [Tooltip("The prefab to use for representing the player")]
     public GameObject playerPrefab;
+    public GameObject cheesePrefab;
     public static MainGameManager Instance;
 
     public const int NUMBER_OF_TEAMS = 2;
@@ -65,12 +66,40 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
     }
 
-    void DoSetup(byte playerType)
-    {   
+    void DoSetup(object[] data)
+    {
         Debug.Log("DoSetup getting executed ... !");
+
+        byte teamNum = (byte)data[0];
+        byte playerType = (byte)data[1];
 
         PlayerType pt = (PlayerType)playerType;
         TestPlayerManager.LocalPlayerInstance.GetComponent<TestPlayerManager>().playerType = pt;
+
+        gameTeamManagers = new GameTeamManager[NUMBER_OF_TEAMS];
+        for (int i = 0; i < gameTeamManagers.Length; i++)
+        {
+            gameTeamManagers[i] = new GameTeamManager(teamNum, "");
+        }
+
+        Vector3[] cheeseLocations = (Vector3[])data[2];
+        gameTeamManagers[teamNum].SetCheeseLocations(cheeseLocations);
+
+        foreach (var cl in cheeseLocations)
+        {
+            var cheeseObj = Instantiate(cheesePrefab, cl, Quaternion.identity);
+
+
+            if (pt == PlayerType.Nose)
+            {
+
+            }
+            else
+            {
+                cheeseObj.GetComponent<MeshRenderer>().enabled = false;
+            }
+        }
+
         setupDone = true;
     }
 
@@ -102,8 +131,7 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
             Debug.Log("DoSetupEventCode!");
             object[] data = (object[])photonEvent.CustomData;
 
-            byte playerType = (byte)data[0];
-            DoSetup(playerType);
+            DoSetup(data);
         }
     }
 
@@ -121,21 +149,47 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
             {
                 tryingToSetup = true;
                 Debug.Log("Masterclient here. Setting up!");
-                byte currentPlayerType = 0;
-                foreach(var playerEntry in PhotonNetwork.CurrentRoom.Players)
-                {
-                    var player = playerEntry.Value;
+                byte currentPlayerTypeByte = 0;
+                byte teamNum = 0;
 
-                    object[] content = new object[] { currentPlayerType };
+                Vector3[] cheeseLocations = new Vector3[10];
+                for (int i = 0; i < cheeseLocations.Length; i++)
+                {
+                    cheeseLocations[i] = new Vector3(Random.Range(-10, 10), Random.Range(1, 3), Random.Range(-10, 10));
+                }
+
+                foreach (var playerEntry in PhotonNetwork.CurrentRoom.Players)
+                {
+                    PlayerType currentPlayerType = (PlayerType)currentPlayerTypeByte;
+                    var player = playerEntry.Value;
+                    object[] content;
+
+                    content = new object[] { 
+                        teamNum,
+                        currentPlayerTypeByte,
+                        cheeseLocations 
+                    };
+
+                    // extra stuff maybe?
+                    if (currentPlayerType == PlayerType.Nose)
+                    {
+
+                    }
+                    else
+                    {
+
+                    }
+
                     RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All, TargetActors = new int[] { player.ActorNumber } }; // You would have to set the Receivers to All in order to receive this event on the local client as well
                     PhotonNetwork.RaiseEvent(DoSetupEventCode, content, raiseEventOptions, SendOptions.SendReliable);
 
                     //PhotonNetwork.RPC("DoSetup", player, currentPlayerType);
 
-                    currentPlayerType++;
-                    if (currentPlayerType >= PLAYERS_PER_TEAM)
+                    currentPlayerTypeByte++;
+                    if (currentPlayerTypeByte >= PLAYERS_PER_TEAM)
                     {
-                        currentPlayerType = 0;
+                        currentPlayerTypeByte = 0;
+                        teamNum++;
                     }
                 }
             }

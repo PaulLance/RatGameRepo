@@ -540,6 +540,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Health: 1
   beams: {fileID: 933181898}
+  playerType: 0
 --- !u!114 &919132148901783003
 MonoBehaviour:
   m_ObjectHideFlags: 0
