@@ -29,6 +29,9 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
     [SerializeField] private bool DBG_FULL_TEAMS = false;
 
     public const byte DoSetupEventCode = 1;
+    public const byte CollectCheeseEventCode = 5;
+
+    public byte MyTeamNum;
 
     public enum PlayerType : byte
     {
@@ -45,13 +48,27 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
     }
 
-
-
-    [PunRPC]
-    void SetupCheese(Vector3[] cheeseLocations, PhotonMessageInfo info)
+    public void OnCollectCheese(CheeseObject co, byte teamNum)
     {
-
+        gameTeamManagers[teamNum].allCheese[co.cheeseId].collected = true;
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+        object[] content = new object[] { co.cheeseId, teamNum };
+        PhotonNetwork.RaiseEvent(CollectCheeseEventCode, content, raiseEventOptions, SendOptions.SendReliable);
     }
+
+    private void CollectCheese(object[] data)
+    {
+        byte cheeseId = (byte)data[0];
+        byte teamNum = (byte)data[1];
+
+        if(teamNum != MyTeamNum)
+        {
+            return;
+        }
+
+        gameTeamManagers[teamNum].CollectCheese(cheeseId);
+    }
+
 
     void DoSetup(object[] data)
     {
@@ -59,6 +76,8 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
         byte teamNum = (byte)data[0];
         byte playerType = (byte)data[1];
+
+        MyTeamNum = teamNum;
 
         PlayerType pt = (PlayerType)playerType;
         //TestPlayerManager.LocalPlayerInstance.GetComponent<TestPlayerManager>().playerType = pt;
@@ -70,7 +89,6 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         }
 
         Vector3[] cheeseLocations = (Vector3[])data[2];
-        gameTeamManagers[teamNum].SetCheeseLocations(cheeseLocations);
 
 
         Vector3[] trapLocations = (Vector3[])data[3];
@@ -80,11 +98,15 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         {
             trapTypes[i] = (GameTeamManager.Trap.TrapType)trapTypesByte[i];
         }
-        gameTeamManagers[teamNum].SetTrapLocations(trapLocations, trapTypes);
 
-        foreach (var cl in cheeseLocations)
+        CheeseObject[] cheeseObjects = new CheeseObject[cheeseLocations.Length];
+
+        for (int i = 0; i < cheeseLocations.Length; i++)
         {
-            var cheeseObj = Instantiate(cheesePrefab, cl, Quaternion.identity);
+            var cheeseObj = Instantiate(cheesePrefab, cheeseLocations[i], Quaternion.identity);
+            cheeseObjects[i] = cheeseObj.GetComponent<CheeseObject>();
+            cheeseObjects[i].cheeseId = (byte)i;
+
 
 
             bool enableMeshRenderer = true;
@@ -138,7 +160,10 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
             trapObj.GetComponent<Collider>().enabled = enableTrigger;
         }
 
-        if(pt == PlayerType.Movement)
+        gameTeamManagers[teamNum].SetCheeseLocations(cheeseLocations, cheeseObjects);
+        gameTeamManagers[teamNum].SetTrapLocations(trapLocations, trapTypes);
+
+        if (pt == PlayerType.Movement)
         {
 
             if (playerPrefab == null)
@@ -154,6 +179,8 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
                     Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManagerHelper.ActiveSceneName);
                     // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
                     GameObject newObject = PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
+                    TestPlayerManager tpm = newObject.GetComponent<TestPlayerManager>();
+                    tpm.TeamNum = teamNum;
                 }
                 else
                 {
@@ -216,6 +243,11 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
             object[] data = (object[])photonEvent.CustomData;
 
             DoSetup(data);
+        }else if(eventCode == CollectCheeseEventCode)
+        {
+            object[] data = (object[])photonEvent.CustomData;
+
+            CollectCheese(data);
         }
     }
 
@@ -313,6 +345,7 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
     {
         PhotonNetwork.LeaveRoom();
     }
+
 
 
     #endregion

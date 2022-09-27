@@ -10,10 +10,13 @@ public class GameTeamManager
         public Vector3 position;
         public bool collected;
 
-        public Cheese(Vector3 position, bool collected)
+        public CheeseObject cheeseObj;
+
+        public Cheese(Vector3 position, bool collected, CheeseObject cheeseObj)
         {
             this.position = position;
             this.collected = collected;
+            this.cheeseObj = cheeseObj;
         }
     }
 
@@ -54,12 +57,12 @@ public class GameTeamManager
         TeamName = teamName;
     }
 
-    internal void SetCheeseLocations(Vector3[] cheeseLocations)
+    internal void SetCheeseLocations(Vector3[] cheeseLocations, CheeseObject[] cheeseObjs)
     {
         allCheese = new Cheese[cheeseLocations.Length];
         for (int i = 0; i < allCheese.Length; i++)
         {
-            allCheese[i] = new Cheese(cheeseLocations[i], false);
+            allCheese[i] = new Cheese(cheeseLocations[i], false, cheeseObjs[i]);
         }
     }
 
@@ -70,5 +73,11 @@ public class GameTeamManager
         {
             allTraps[i] = new Trap(trapLocations[i], trapType[i]);
         }
+    }
+
+    internal void CollectCheese(byte cheeseId)
+    {
+        allCheese[cheeseId].collected = true;
+        allCheese[cheeseId].cheeseObj.OnCollect();
     }
 }

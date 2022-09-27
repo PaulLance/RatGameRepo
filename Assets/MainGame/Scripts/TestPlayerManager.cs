@@ -1,4 +1,5 @@
 using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,8 @@ public class TestPlayerManager : MonoBehaviourPunCallbacks, IPunObservable
     [Tooltip("The local player instance. Use this to know if the local player is represented in the Scene")]
     public static GameObject LocalPlayerInstance;
 
+    public byte TeamNum;
+
     #region Private Fields
 
     [Tooltip("The Beams GameObject to control")]
@@ -18,6 +21,7 @@ public class TestPlayerManager : MonoBehaviourPunCallbacks, IPunObservable
     private GameObject beams;
     //True, when the user is firing
     bool IsFiring;
+    public bool isStunned = false;
     public MainGameManager.PlayerType playerType;
     #endregion
 
@@ -110,10 +114,6 @@ void OnLevelWasLoaded(int level)
     /// </summary>
     void Update()
     {
-        if (photonView.IsMine)
-        {
-            ProcessInputs();
-        }
 
         // trigger Beams active state
         if (beams != null && IsFiring != beams.activeInHierarchy)
@@ -121,13 +121,10 @@ void OnLevelWasLoaded(int level)
             beams.SetActive(IsFiring);
         }
 
-        if (photonView.IsMine)
+        if (photonView.IsMine && !isStunned)
         {
             ProcessInputs();
-            if (Health <= 0f)
-            {
-                MainGameManager.Instance.LeaveRoom();
-            }
+
         }
     }
 
@@ -169,14 +166,48 @@ void OnLevelWasLoaded(int level)
         {
             return;
         }
-        // We are only interested in Beamers
+        /*// We are only interested in Beamers
         // we should be using tags but for the sake of distribution, let's simply check by name.
-        if (!other.name.Contains("Beam"))
+        if (other.name.Contains("Beam"))
         {
+            Health -= 0.1f;
             return;
+        }*/
+
+
+        if (other.CompareTag("Cheese"))
+        {
+            CollectCheese(other.gameObject);
         }
-        Health -= 0.1f;
+        if (other.CompareTag("Trap"))
+        {
+            StunSelf();
+        }
+
     }
+
+    private void CollectCheese(GameObject gameObject)
+    {
+        CheeseObject co = gameObject.GetComponent<CheeseObject>();
+        MainGameManager.Instance.OnCollectCheese(co, TeamNum);
+    }
+
+    private void StunSelf()
+    {
+        // TODO PLAY ANIMATION OF STUN!
+        isStunned = true;
+        StartCoroutine(CantMove());
+
+    }
+
+    IEnumerator CantMove()
+    {
+        isStunned = true;
+        yield return new WaitForSeconds(1.5f);
+        isStunned = false;
+    }
+
+
     /// <summary>
     /// MonoBehaviour method called once per frame for every Collider 'other' that is touching the trigger.
     /// We're going to affect health while the beams are touching the player

@@ -13,6 +13,8 @@ public class PlayerAnimatorManager : MonoBehaviourPun
     private float directionDampTime = .25f;
     private Animator animator;
 
+    TestPlayerManager tpm;
+
     #endregion
 
     #region MonoBehaviour CallBacks
@@ -21,6 +23,7 @@ public class PlayerAnimatorManager : MonoBehaviourPun
     void Start()
     {
         animator = GetComponent<Animator>();
+        tpm = GetComponent<TestPlayerManager>();
         if (!animator)
         {
             Debug.LogError("PlayerAnimatorManager is Missing Animator Component", this);
@@ -37,6 +40,11 @@ public class PlayerAnimatorManager : MonoBehaviourPun
         }
         if (!animator)
         {
+            return;
+        }
+        if (tpm.isStunned)
+        {
+            animator.SetFloat("Speed", 0);
             return;
         }
         // deal with Jumping

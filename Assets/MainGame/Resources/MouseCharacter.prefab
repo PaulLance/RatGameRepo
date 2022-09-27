@@ -868,7 +868,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Health: 1
+  TeamNum: 0
   beams: {fileID: 5446359427625702182}
+  isStunned: 0
   playerType: 0
 --- !u!114 &1347114958443375745
 MonoBehaviour:
