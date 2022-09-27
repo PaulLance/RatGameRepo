@@ -6,16 +6,22 @@ using Photon.Realtime;
 using UnityEngine.SceneManagement;
 using ExitGames.Client.Photon;
 using PlayFab.EconomyModels;
+using System.Linq;
+using System;
+using Random = UnityEngine.Random;
 
 public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
 {
     [Tooltip("The prefab to use for representing the player")]
     public GameObject playerPrefab;
     public GameObject cheesePrefab;
+    public GameObject trapPrefab;
     public static MainGameManager Instance;
 
     public const int NUMBER_OF_TEAMS = 2;
     public const int PLAYERS_PER_TEAM = 4;
+    public const int CHEESE_AMOUNT = 20;
+    public const int TRAPS_AMOUNT = 45;
 
     GameTeamManager[] gameTeamManagers;
     private bool setupDone = false;
@@ -28,8 +34,8 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
     {
         Movement = 0,
         Nose,
-        Ears,
         Eyes,
+        Ears,
     }
 
     void Start()
@@ -37,25 +43,6 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         Instance = this;
 
 
-        if (playerPrefab == null)
-        {
-            Debug.LogError("<Color=Red><a>Missing</a></Color> playerPrefab Reference. Please set it up in GameObject 'Game Manager'", this);
-        }
-        else
-        {
-            Debug.LogFormat("We are Instantiating LocalPlayer from {0}", Application.loadedLevelName);
-            // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
-            if (TestPlayerManager.LocalPlayerInstance == null)
-            {
-                Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManagerHelper.ActiveSceneName);
-                // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
-                GameObject newObject = PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
-            }
-            else
-            {
-                Debug.LogFormat("Ignoring scene load for {0}", SceneManagerHelper.ActiveSceneName);
-            }
-        }
     }
 
 
@@ -74,7 +61,7 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         byte playerType = (byte)data[1];
 
         PlayerType pt = (PlayerType)playerType;
-        TestPlayerManager.LocalPlayerInstance.GetComponent<TestPlayerManager>().playerType = pt;
+        //TestPlayerManager.LocalPlayerInstance.GetComponent<TestPlayerManager>().playerType = pt;
 
         gameTeamManagers = new GameTeamManager[NUMBER_OF_TEAMS];
         for (int i = 0; i < gameTeamManagers.Length; i++)
@@ -85,22 +72,119 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         Vector3[] cheeseLocations = (Vector3[])data[2];
         gameTeamManagers[teamNum].SetCheeseLocations(cheeseLocations);
 
+
+        Vector3[] trapLocations = (Vector3[])data[3];
+        byte[] trapTypesByte = (byte[])data[4];
+        GameTeamManager.Trap.TrapType[] trapTypes = new GameTeamManager.Trap.TrapType[trapLocations.Length];
+        for (int i = 0; i < trapTypesByte.Length; i++)
+        {
+            trapTypes[i] = (GameTeamManager.Trap.TrapType)trapTypesByte[i];
+        }
+        gameTeamManagers[teamNum].SetTrapLocations(trapLocations, trapTypes);
+
         foreach (var cl in cheeseLocations)
         {
             var cheeseObj = Instantiate(cheesePrefab, cl, Quaternion.identity);
 
 
+            bool enableMeshRenderer = true;
+            bool enableTrigger = true;
+
             if (pt == PlayerType.Nose)
             {
-
+                enableMeshRenderer = true;
+                enableTrigger = false;
+            }
+            else if (pt == PlayerType.Movement)
+            {
+                enableMeshRenderer = false;
+                enableTrigger = true;
             }
             else
             {
-                cheeseObj.GetComponent<MeshRenderer>().enabled = false;
+                enableMeshRenderer = false;
+                enableTrigger = false;
             }
+
+            cheeseObj.GetComponent<MeshRenderer>().enabled = enableMeshRenderer;
+            cheeseObj.GetComponent<Collider>().enabled = enableTrigger;
+
+        }
+
+        foreach (var tl in trapLocations)
+        {
+            var trapObj = Instantiate(trapPrefab, tl, Quaternion.identity);
+
+            bool enableMeshRenderer = true;
+            bool enableTrigger = true;
+
+            if (pt == PlayerType.Eyes)
+            {
+                enableMeshRenderer = true;
+                enableTrigger = false;
+            }
+            else if(pt == PlayerType.Movement)
+            {
+                enableMeshRenderer = false;
+                enableTrigger = true;
+            }
+            else
+            {
+                enableMeshRenderer = false;
+                enableTrigger = false;
+            }
+
+            trapObj.GetComponent<MeshRenderer>().enabled = enableMeshRenderer;
+            trapObj.GetComponent<Collider>().enabled = enableTrigger;
+        }
+
+        if(pt == PlayerType.Movement)
+        {
+
+            if (playerPrefab == null)
+            {
+                Debug.LogError("<Color=Red><a>Missing</a></Color> playerPrefab Reference. Please set it up in GameObject 'Game Manager'", this);
+            }
+            else
+            {
+                Debug.LogFormat("We are Instantiating LocalPlayer from {0}", Application.loadedLevelName);
+                // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
+                if (TestPlayerManager.LocalPlayerInstance == null)
+                {
+                    Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManagerHelper.ActiveSceneName);
+                    // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
+                    GameObject newObject = PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
+                }
+                else
+                {
+                    Debug.LogFormat("Ignoring scene load for {0}", SceneManagerHelper.ActiveSceneName);
+                }
+            }
+        }
+        else
+        {
+            StartCoroutine(FindCameraWork());
+
         }
 
         setupDone = true;
+    }
+
+    IEnumerator FindCameraWork()
+    {
+
+        while (true)
+        {
+            CameraWork cw = FindObjectOfType<CameraWork>();
+
+            if(cw != null)
+            {
+                cw.OnStartFollowing();
+                break;
+            }
+
+            yield return new WaitForSeconds(0.5f);
+        }
     }
 
 
@@ -152,10 +236,17 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
                 byte currentPlayerTypeByte = 0;
                 byte teamNum = 0;
 
-                Vector3[] cheeseLocations = new Vector3[10];
+                Vector3[] cheeseLocations = new Vector3[CHEESE_AMOUNT];
                 for (int i = 0; i < cheeseLocations.Length; i++)
                 {
-                    cheeseLocations[i] = new Vector3(Random.Range(-10, 10), Random.Range(1, 3), Random.Range(-10, 10));
+                    cheeseLocations[i] = new Vector3(Random.Range(-10, 10), Random.Range(1.5f, 2.5f), Random.Range(-10, 10));
+                }
+                Vector3[] trapLocations = new Vector3[TRAPS_AMOUNT];
+                byte[] trapTypes = new byte[TRAPS_AMOUNT];
+                for (int i = 0; i < trapLocations.Length; i++)
+                {
+                    trapLocations[i] = new Vector3(Random.Range(-35, 35), 0.625f, Random.Range(-35, 35));
+                    trapTypes[i] = (byte)Random.Range(0, Enum.GetValues(typeof(GameTeamManager.Trap.TrapType)).Length);
                 }
 
                 foreach (var playerEntry in PhotonNetwork.CurrentRoom.Players)
@@ -167,7 +258,9 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
                     content = new object[] { 
                         teamNum,
                         currentPlayerTypeByte,
-                        cheeseLocations 
+                        cheeseLocations,
+                        trapLocations,
+                        trapTypes
                     };
 
                     // extra stuff maybe?
