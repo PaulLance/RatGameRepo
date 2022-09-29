@@ -11,6 +11,9 @@ public class MainLoobyManager : MonoBehaviourPunCallbacks
 
     public static MainLoobyManager lobbyManager;
     [SerializeField] GameObject loadingCanvas;
+    [SerializeField] GameObject lobbyCanvas;
+    [SerializeField] GameObject chat;
+
 
     private void Awake()
     {
@@ -25,6 +28,8 @@ public class MainLoobyManager : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         loadingCanvas.SetActive(false);
+        lobbyCanvas.SetActive(true);
+        chat.SetActive(true);
         PhotonNetwork.JoinLobby();
 
     }
@@ -39,6 +44,8 @@ public class MainLoobyManager : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinRandomOrCreateRoom();
     }
 
+    //public void 
+//
 
 
 

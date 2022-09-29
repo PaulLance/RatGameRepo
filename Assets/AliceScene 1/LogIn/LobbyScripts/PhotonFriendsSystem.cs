@@ -21,7 +21,7 @@ public class PhotonFriendsSystem : MonoBehaviourPunCallbacks
     private void ConvertToPhotonSide(List<PlayFabFriendInfo> friends)
     {
         if (friends.Count == 0) { FindObjectOfType<FriendAreaUI>().CleanList(); return; }
-        string[] friendNames = friends.Select(f => f.Username).ToArray();
+        string[] friendNames = friends.Select(f => f.TitleDisplayName).ToArray();
         Debug.Log(friendNames.Length);
         if (friendNames != null)
         {

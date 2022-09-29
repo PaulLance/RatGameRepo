@@ -9,6 +9,7 @@ using System.Linq;
 public class PlayfabFriendSystem : MonoBehaviour
 {
     public static Action<List<FriendInfo>> FriendsListInPhoton;
+    public static Action<string> FriendUIReport;
     List<FriendInfo> friends;
     private void Awake()
     {
@@ -26,7 +27,7 @@ public class PlayfabFriendSystem : MonoBehaviour
 
     public void RemoveFriend(string friendName)
     {
-        string id = friends.FirstOrDefault(f => f.Username == friendName).FriendPlayFabId;
+        string id = friends.FirstOrDefault(f => f.TitleDisplayName == friendName).FriendPlayFabId;
         var request = new RemoveFriendRequest();
         request.FriendPlayFabId = id;
         PlayFabClientAPI.RemoveFriend(request, OnFriendRemoveSuccess, OnFriendRemoveFailure);
@@ -45,17 +46,19 @@ public class PlayfabFriendSystem : MonoBehaviour
     private void TryToAddFriend(string friendName)
     {
         var request = new AddFriendRequest();
-        request.FriendUsername = friendName;
+        request.FriendTitleDisplayName = friendName;
         PlayFabClientAPI.AddFriend(request, OnSuccess, OnFailure);
     }
 
     private void OnFailure(PlayFabError error)
     {
+        FriendUIReport?.Invoke(error.ErrorMessage);
         Debug.Log(error.GenerateErrorReport());
     }
 
     private void OnSuccess(AddFriendResult result)
     {
+        FriendUIReport?.Invoke("Friend was added successfully. Check your friends list.");
         FriendList();
     }
 

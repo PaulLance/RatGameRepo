@@ -15,6 +15,7 @@ public class FriendAreaUI : MonoBehaviour
     [SerializeField] GameObject friendUIObject;
 
 
+
     private void Awake()
     {
         PhotonFriendsSystem.friendListUI += UpdatePlayerList;

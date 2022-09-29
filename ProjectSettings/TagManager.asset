@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Cheese
   - Trap
+  - notification
   layers:
   - Default
   - TransparentFX

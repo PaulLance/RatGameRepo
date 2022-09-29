@@ -62,19 +62,29 @@ public class PlayfabAuth : MonoBehaviour
 
     private void OnSuccess(LoginResult result)
     {
+        PlayerPrefs.SetString("user", name);
+        UpdateDisplayName();
+        PhotonNetwork.NickName = name;
         IsAuthenticated = true;
         logInUI.DisactiveAllForms();
         MainLoobyManager.lobbyManager.ConnectToMaster();
     }
 
-    private void OnFailName(PlayFabError obj)
+    public void UpdateDisplayName()
     {
-        throw new NotImplementedException();
+        var request = new UpdateUserTitleDisplayNameRequest();
+        request.DisplayName = name;
+        PlayFabClientAPI.UpdateUserTitleDisplayName(request, OnSuccessUpdate, OnFailureUpdate);
     }
 
-    private void OnSuccessName(UpdateUserTitleDisplayNameResult obj)
+    private void OnFailureUpdate(PlayFabError obj)
     {
-        
-
+        Debug.Log("failure");
     }
+
+    private void OnSuccessUpdate(UpdateUserTitleDisplayNameResult obj)
+    {
+        Debug.Log("Success");
+    }
+
 }
