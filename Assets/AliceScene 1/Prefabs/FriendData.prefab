@@ -597,7 +597,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   friendName: {fileID: 4848527074570651354}
-  status: {fileID: 9144760457206921227}
+  statusRound: {fileID: 5591254288743188101}
 --- !u!222 &1218735212924225614
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,16 +6,14 @@ using UnityEngine;
 
 public class ActionsArea : MonoBehaviour
 {
-
     string friendName;
     public static Action<string> SendInvintation;
     [SerializeField] GameObject sendInvintationLabel;
-   
-
 
     public void SetFriendName(string name)
     {
         friendName = name;
+
     }
     public void CloseActionsArea()
     {

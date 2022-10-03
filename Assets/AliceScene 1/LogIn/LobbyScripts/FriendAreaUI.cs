@@ -18,7 +18,7 @@ public class FriendAreaUI : MonoBehaviour
 
     private void Awake()
     {
-        PhotonFriendsSystem.friendListUI += UpdatePlayerList;
+        PhotonChatFriendController.OnDisplayFriends += UpdatePlayerList;
     }
 
     public void CleanList()
@@ -31,13 +31,11 @@ public class FriendAreaUI : MonoBehaviour
     }
 
 
-    private void UpdatePlayerList(List<FriendInfo> players)
+    private void UpdatePlayerList(List<string> players)
     {
-
         CleanList();
 
-
-        foreach (FriendInfo player in players)
+        foreach (string player in players)
         {
             GameObject friendField=Instantiate(friendUIObject, listArea);
             friendField.GetComponent<friendFieldUI>().UpdateInfo(player); 

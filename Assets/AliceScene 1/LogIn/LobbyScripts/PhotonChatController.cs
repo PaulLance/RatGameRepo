@@ -13,7 +13,10 @@ public class PhotonChatController : MonoBehaviour, IChatClientListener
     ChatClient chatClient;
     [SerializeField] GameObject notification;
     [SerializeField] GameObject lobby;
-    public static Action<string> getMassage;
+    public static Action<string, string> getMassage;
+    public static Action<PhotonStatus> OnStatusUpdated;
+    public static Action<ChatClient> OnChatConnected;
+
 
 
     void Awake()
@@ -30,7 +33,8 @@ public class PhotonChatController : MonoBehaviour, IChatClientListener
 
     private void SendInvintation(string friendName)
     {
-        chatClient.SendPrivateMessage(friendName, "Invintation");
+        Debug.Log(PhotonNetwork.CurrentRoom.Name);
+        chatClient.SendPrivateMessage(friendName, PhotonNetwork.CurrentRoom.Name);
     }
 
     void Start()
@@ -49,8 +53,6 @@ public class PhotonChatController : MonoBehaviour, IChatClientListener
 
     private void ConnectToPhotonChat()
     {
-        Debug.Log("connecting to phonon chat");
-        Debug.Log(PhotonNetwork.NickName);
         chatClient.Connect(PhotonNetwork.PhotonServerSettings.AppSettings.AppIdChat, PhotonNetwork.AppVersion,
         new Photon.Chat.AuthenticationValues(userID));
     }
@@ -71,13 +73,13 @@ public class PhotonChatController : MonoBehaviour, IChatClientListener
 
     public void OnConnected()
     {
-        Debug.Log("ChatSuccess");
-        SendDirectMessage("SmallRat", "Hi, rat!");
+        OnChatConnected.Invoke(chatClient);
+        chatClient.SetOnlineStatus(ChatUserStatus.Online);
     }
 
     public void OnDisconnected()
     {
-        Debug.Log(56);
+        chatClient.SetOnlineStatus(ChatUserStatus.Offline);
     }
 
     public void OnGetMessages(string channelName, string[] senders, object[] messages)
@@ -94,18 +96,16 @@ public class PhotonChatController : MonoBehaviour, IChatClientListener
             Debug.Log(splitNames[1]);
             if (!sender.Equals(senderName, StringComparison.OrdinalIgnoreCase))
             {
-                Debug.Log(message.ToString());
-                if (message.ToString() == "Invintation")
-                {
                     Debug.Log("MESSAGE");
-                    getMassage.Invoke(senderName);
-                }
+                    getMassage.Invoke(senderName, message.ToString());
             }
         }
     }  
 
     public void OnStatusUpdate(string user, int status, bool gotMessage, object message)
     {
+        PhotonStatus newStatus = new PhotonStatus(user, status, (string)message);
+        OnStatusUpdated?.Invoke(newStatus);
     }
 
     public void OnSubscribed(string[] channels, bool[] results)

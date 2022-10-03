@@ -46,6 +46,9 @@ MonoBehaviour:
   - SetupCheese
   - SetupDone
   - DoSetup
+  - UpdateCanvas
+  - CanvasActionsRemove
+  - UpdateDictionaries
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

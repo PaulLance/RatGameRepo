@@ -1,3 +1,4 @@
+using Photon.Chat;
 using Photon.Realtime;
 using System;
 using System.Collections;
@@ -9,26 +10,49 @@ using UnityEngine.UI;
 public class friendFieldUI : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI friendName;
-    [SerializeField] Transform status;
+    [SerializeField] GameObject statusRound;
+    Color onlineColor = new Color(0.3843137f, 0.9490196f, 0.4313726f, 1f);
+    Color offlineColor = new Color(0.9490196f, 0.4047498f, 0.3843138f,1f);
+    public static Action<string> GetCurrentStatus;
 
-    internal void UpdateInfo(FriendInfo friendInfo)
+
+    private void Awake()
     {
-        friendName.text = friendInfo.Name;
+        PhotonChatController.OnStatusUpdated += Status;
+        PhotonChatFriendController.OnPhotonStatusUpdated += Status;
+    }
 
-        //Debug.Log(friendInfo.IsOnline);
-        //if (friendInfo.IsOnline)
-        //{
-        //    status.GetChild(0).gameObject.SetActive(true);
-        //    status.GetChild(1).gameObject.SetActive(false);
+    private void OnDestroy()
+    {
+        PhotonChatController.OnStatusUpdated -= Status;
+        PhotonChatFriendController.OnPhotonStatusUpdated -= Status;
+    }
 
-        //}
-        //else
-        //{
-        //    status.GetChild(1).gameObject.SetActive(true);
-        //    status.GetChild(0).gameObject.SetActive(false);
 
-        //}
+    void Status(PhotonStatus status)
+    {
+        if (friendName.text == status.playerName)
+        {
+            ChangeStatus(status);
+        }
+    }
+    private void ChangeStatus(PhotonStatus status)
+    {
+        if (status.status == ChatUserStatus.Online)
+        {
+            statusRound.GetComponent<Image>().color = onlineColor;
+        }
+        if (status.status == ChatUserStatus.Offline)
+        {
+            statusRound.GetComponent<Image>().color = offlineColor;
 
+        }
+    }
+
+    internal void UpdateInfo(string name)
+    { 
+        friendName.text = name;
+        GetCurrentStatus.Invoke(name);
     }
 
     
