@@ -21,6 +21,7 @@ public class FriendAreaUI : MonoBehaviour
         PhotonChatFriendController.OnDisplayFriends += UpdatePlayerList;
     }
 
+
     public void CleanList()
     {
         foreach (Transform child in listArea)
@@ -41,6 +42,9 @@ public class FriendAreaUI : MonoBehaviour
             friendField.GetComponent<friendFieldUI>().UpdateInfo(player); 
         }
     }
+
+
+
 
     public void AddFriend()
     {

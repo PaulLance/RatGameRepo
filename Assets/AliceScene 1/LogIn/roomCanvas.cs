@@ -14,35 +14,25 @@ public class roomCanvas : MonoBehaviour
     [SerializeField] GameObject startButton;
     Color buttonActive = new Color(0.4921149f, 0.3224012f, 0.5943396f, 1f);
     Color buttonDisable = new Color(0.6226415f, 0.6226415f, 0.6226415f, 1f);
+    [SerializeField] TextMeshProUGUI roleText;
+    
 
     PhotonView photonView;
 
     private void Awake()
     {
         MainLoobyManager.updateRoomCanvas += CanvasActions;
-        MainLoobyManager.updateRoomCanvas1 += CanvasActions1;
         MainLoobyManager.clearRoomCanvas += ClearRoomCanvas;
+        playerData.UpateRole += UpdateRole;
 
 
     }
 
-    [PunRPC]
-    private void CanvasActionsRemove(string playerName)
+    private void UpdateRole(int num)
     {
-        ChangeStartButtonState(false) ;
-        foreach (Transform child in playersLabels)
-        {
-            if (child.GetComponentInChildren<TextMeshProUGUI>().text == playerName)
-            {
-                child.GetComponentInChildren<TextMeshProUGUI>().text = "";
-                child.gameObject.SetActive(false);
-                break;
-            }
-        }
-        ActiveStartButton();
-
-
+        roleText.text = num.ToString();
     }
+
 
     private void Start()
     {
@@ -51,11 +41,6 @@ public class roomCanvas : MonoBehaviour
     public void CanvasActions(int[] objects, string[] values)
     {
         photonView.RPC("UpdateCanvas", RpcTarget.All, objects, values);
-    }
-
-    public void CanvasActions1(string name)
-    {
-        photonView.RPC("CanvasActionsRemove", RpcTarget.AllBuffered, name);
     }
 
     [PunRPC]
@@ -68,7 +53,7 @@ public class roomCanvas : MonoBehaviour
             canvasArea.SetActive(true);
         }
 
-        for (int i=0; i<keys.Length; i++)
+        for (int i = 0; i < keys.Length; i++)
         {
             GameObject obj = playersLabels.GetChild(i).gameObject;
             if (keys[i] == -1)
@@ -76,19 +61,23 @@ public class roomCanvas : MonoBehaviour
                 obj.SetActive(false);
                 obj.GetComponentInChildren<TextMeshProUGUI>().text = "";
             }
-            else
-            {
-                if (PhotonNetwork.CurrentRoom.PlayerCount > 1)
-                {
-                    obj.SetActive(true);
-                    obj.GetComponentInChildren<TextMeshProUGUI>().text = values[i];
-                }
-                else { obj.SetActive(false); }
+            else { 
+            
+                 obj.SetActive(true);
+                 obj.GetComponentInChildren<TextMeshProUGUI>().text = values[i];
+             }
 
-            }
+           
         }
 
-        if (PhotonNetwork.CurrentRoom.PlayerCount == 4)
+        ActionsWhenFourPlayers();
+
+    }
+
+    private void ActionsWhenFourPlayers()
+    {
+        int playersInRoom=PhotonNetwork.CurrentRoom.PlayerCount;
+        if (playersInRoom == 4)
         {
             ChangeStartButtonState(true);
         }
@@ -96,8 +85,10 @@ public class roomCanvas : MonoBehaviour
         {
             ChangeStartButtonState(false);
         }
-
-
+        if (playersInRoom == 1)
+        {
+            ClearRoomCanvas();
+        }
     }
 
     private void ChangeStartButtonState(bool state)
@@ -122,13 +113,18 @@ public class roomCanvas : MonoBehaviour
 
     private void ActiveStartButton()
     {
-        if (PhotonNetwork.IsMasterClient && startButton.activeInHierarchy==false)
+        if (PhotonNetwork.IsMasterClient)
         {
-            Debug.Log(60);
-            ChangeStartButtonState(false);
-            startButton.SetActive(true);
+            if (startButton.activeInHierarchy == false) 
+            {
+                ChangeStartButtonState(false);
+                startButton.SetActive(true);
+            }
         }
-        else { startButton.SetActive(false); }
+        else {
+            if (startButton.activeInHierarchy == false) { return; }
+                startButton.SetActive(false); 
+        }
     }
 
     public void LeaveParty()
@@ -138,7 +134,6 @@ public class roomCanvas : MonoBehaviour
 
     public void ClearRoomCanvas()
     {
-
         foreach (Transform child in playersLabels)
         {
             child.GetComponentInChildren<TextMeshProUGUI>().text = "";

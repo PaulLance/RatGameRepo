@@ -14,6 +14,8 @@ public class PhotonChatFriendController : MonoBehaviour
     public static Dictionary<string, PhotonStatus> friendStatuses = new Dictionary<string, PhotonStatus>();
     public static Action<List<string>> OnDisplayFriends;
     public static Action<PhotonStatus> OnPhotonStatusUpdated;
+    public static Action<string[], PhotonStatus[]> forcedStatusUpdate;
+
 
 
     private void Awake()
@@ -22,10 +24,12 @@ public class PhotonChatFriendController : MonoBehaviour
         PhotonChatController.OnChatConnected += ChatConnected;
         PhotonChatController.OnStatusUpdated += StatusUpdated;
         friendFieldUI.GetCurrentStatus += CurrentStatus;
+
     }
 
     private void CurrentStatus(string friendName)
     {
+      
         PhotonStatus status;
         if (friendStatuses.ContainsKey(friendName))
         {
@@ -35,7 +39,8 @@ public class PhotonChatFriendController : MonoBehaviour
         {
             status = new PhotonStatus(friendName, 0, "");
         }
-        OnPhotonStatusUpdated.Invoke(status);
+        Debug.Log(status.status);
+        OnPhotonStatusUpdated?.Invoke(status);
     }
 
     private void ChatConnected(ChatClient client)
@@ -47,14 +52,16 @@ public class PhotonChatFriendController : MonoBehaviour
 
     void OnDestroy()
     {
-        PlayfabFriendSystem.FriendsListInPhoton -= FriendsUpdated;
         PhotonChatController.OnStatusUpdated -= StatusUpdated;
         PhotonChatController.OnChatConnected -= ChatConnected;
         friendFieldUI.GetCurrentStatus -= CurrentStatus;
+        PlayfabFriendSystem.FriendsListInPhoton -= FriendsUpdated;
+
     }
 
     private void StatusUpdated(PhotonStatus status)
     {
+        Debug.Log("Status" + status.playerName);
         if (friendStatuses.ContainsKey(status.playerName))
         {
             friendStatuses[status.playerName] = status;
@@ -63,6 +70,15 @@ public class PhotonChatFriendController : MonoBehaviour
         {
             friendStatuses.Add(status.playerName, status);
         }
+        //foreach (KeyValuePair<string,PhotonStatus> status1 in friendStatuses)
+        //{
+        //    Debug.Log(status1.Key);
+        //    Debug.Log(status1.Value.status);
+        //}
+        string[] playerNames = friendStatuses.Select(f => f.Key).ToArray();
+        PhotonStatus[] statuses = friendStatuses.Select(f => f.Value).ToArray();
+
+
     }
 
     private void FriendsUpdated(List<FriendInfo> friends)
@@ -83,6 +99,7 @@ public class PhotonChatFriendController : MonoBehaviour
 
     private void FindPhotonFriends()
     {
+        Debug.Log(19);
         if (chatClient==null) { return; }
         if (friendList.Count != 0)
         {

@@ -1,7 +1,9 @@
 using Photon.Pun;
+using Photon.Realtime;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ActionsArea : MonoBehaviour
@@ -9,12 +11,51 @@ public class ActionsArea : MonoBehaviour
     string friendName;
     public static Action<string> SendInvintation;
     [SerializeField] GameObject sendInvintationLabel;
+    [SerializeField] GameObject inviteToPartyButton;
+    PhotonStatus status;
+
+    private void Awake()
+    {
+        MainLoobyManager.updateActionsArea += CheckIfFriendInRoom;
+    }
+
+    private void OnDestroy()
+    {
+        MainLoobyManager.updateActionsArea -= CheckIfFriendInRoom;
+
+    }
 
     public void SetFriendName(string name)
     {
         friendName = name;
 
+        CheckIfFriendInRoom();
+
     }
+
+    private void CheckIfFriendInRoom()
+    {
+        bool shouldActive = true;
+        Dictionary<int, Photon.Realtime.Player> players = PhotonNetwork.CurrentRoom.Players;
+
+        string[] curPlayers = players.Select(f => f.Value.NickName).ToArray();
+
+        foreach (string player in curPlayers)
+        {
+            if (string.Equals(friendName, player))
+            {
+                inviteToPartyButton.SetActive(false);
+                shouldActive = false;
+                break;
+            }
+        }
+
+        if (shouldActive == true && status.status==2)
+        {
+            inviteToPartyButton.SetActive(true);
+        }
+    }
+
     public void CloseActionsArea()
     {
         Destroy(this.gameObject);
@@ -42,5 +83,17 @@ public class ActionsArea : MonoBehaviour
         Destroy(this.gameObject);
     }
 
+    internal void SetStatus(PhotonStatus newStatus)
+    {
+        status = newStatus;
+        if (newStatus.status == 0)
+        {
+            inviteToPartyButton.SetActive(false);
+        }
+        else
+        {
+            inviteToPartyButton.SetActive(true);
 
+        }
+    }
 }

@@ -92,8 +92,6 @@ public class PhotonChatController : MonoBehaviour, IChatClientListener
         {
             string[] splitNames = channelName.Split(new char[] { ':' });
             string senderName = splitNames[0];
-            Debug.Log(senderName);
-            Debug.Log(splitNames[1]);
             if (!sender.Equals(senderName, StringComparison.OrdinalIgnoreCase))
             {
                     Debug.Log("MESSAGE");
@@ -104,6 +102,7 @@ public class PhotonChatController : MonoBehaviour, IChatClientListener
 
     public void OnStatusUpdate(string user, int status, bool gotMessage, object message)
     {
+        Debug.Log("new status" + user + status.ToString());
         PhotonStatus newStatus = new PhotonStatus(user, status, (string)message);
         OnStatusUpdated?.Invoke(newStatus);
     }

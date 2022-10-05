@@ -19,6 +19,7 @@ public class MainLoobyManager : MonoBehaviourPunCallbacks
     public static Action<int[], string[]> updateRoomCanvas;
     public static Action<string> updateRoomCanvas1;
     public static Action clearRoomCanvas;
+    public static Action updateActionsArea;
     public Dictionary<int, string> dict = new Dictionary<int, string>();
     PhotonView photonView;
 
@@ -27,6 +28,10 @@ public class MainLoobyManager : MonoBehaviourPunCallbacks
     {
         lobbyManager = this;
         InviteUI.OnAcceptNetwork += InintationAccept;
+        for (int i=0; i<4; i++)
+        {
+            dict.Add(i, "");
+        }
     }
 
     private void Start()
@@ -65,9 +70,10 @@ public class MainLoobyManager : MonoBehaviourPunCallbacks
         {
             for (int i = 0; i < 4; i++) {
 
-                if (!dict.ContainsKey(i)) 
+                if (string.IsNullOrEmpty(dict[i])) 
                 {
-
+                    Debug.Log(i + "key");
+                    Debug.Log(dict.Count);
                     dict[i] = newPlayer.NickName;
                     break;
                 }
@@ -76,7 +82,7 @@ public class MainLoobyManager : MonoBehaviourPunCallbacks
            string[] values = dict.Select(f => f.Value).ToArray();
            photonView.RPC("UpdateDictionaries",RpcTarget.Others, keys, values);
            UpdateInformation();
-
+           updateActionsArea?.Invoke();
         }
 
 
@@ -90,11 +96,24 @@ public class MainLoobyManager : MonoBehaviourPunCallbacks
         for (int i=0; i<keys.Length; i++)
         {
             newDict[keys[i]] = values[i];
+            UpdateRoleOnPlayer(values[i], keys[i]);
         }
         dict = newDict;
 
     }
-    
+
+    private void UpdateRoleOnPlayer(string value, int key)
+    {
+        if (string.Equals(value, PhotonNetwork.LocalPlayer.NickName))
+        {
+            playerData data=FindObjectOfType<playerData>();
+            Debug.Log(data);
+            if (data != null)
+            {
+                data.SetRole(key);
+            }
+        }
+    }
 
     private void UpdateInformation()
     {
@@ -103,7 +122,7 @@ public class MainLoobyManager : MonoBehaviourPunCallbacks
         int m = 0;
         for (int i = 0; i < 4; i++)
         {
-            if (dict.ContainsKey(i))
+            if (!string.IsNullOrEmpty(dict[i]))
             {
                 keys1[m] = i;
                 values[m] = dict[i];
@@ -124,14 +143,19 @@ public class MainLoobyManager : MonoBehaviourPunCallbacks
         {
             foreach (KeyValuePair<int, string> pair in dict)
             {
-                if (pair.Value == otherPlayer.NickName)
+                if (string.Equals(pair.Value,otherPlayer.NickName))
                 {
-                    dict.Remove(pair.Key);
+                    dict[pair.Key] = "";
                     break;
                 }
             }
+            int[] keys = dict.Select(f => f.Key).ToArray();
+            string[] values = dict.Select(f => f.Value).ToArray();
+            photonView.RPC("UpdateDictionaries", RpcTarget.Others, keys, values);
             UpdateInformation();
         }
+        updateActionsArea?.Invoke();
+
     }
 
     private void OnDestroy()
@@ -160,12 +184,12 @@ public class MainLoobyManager : MonoBehaviourPunCallbacks
         string roomName = PlayerPrefs.GetString("ROOM");
         if (!string.IsNullOrEmpty(roomName))
         {
-            JoinPlayerRoom();
+           JoinPlayerRoom();
         }
         else
         {
             CreateRoom();
-            dict[0] = PhotonNetwork.LocalPlayer.NickName;
+
         }
     }
 
@@ -186,10 +210,21 @@ public class MainLoobyManager : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinRandomOrCreateRoom();
     }
 
+
+    public override void OnJoinedRoom()
+    {
+        PhotonNetwork.Instantiate("PlayerData", Vector3.zero, Quaternion.identity);
+        dict[0] = PhotonNetwork.LocalPlayer.NickName;
+        UpdateRoleOnPlayer(PhotonNetwork.LocalPlayer.NickName, 0);
+    }
+
     public override void OnLeftRoom()
     {
         clearRoomCanvas.Invoke();
-        dict.Clear();
+        for (int i=0; i<4; i++)
+        {
+            dict[i] = "";
+        }
 
     }
 
