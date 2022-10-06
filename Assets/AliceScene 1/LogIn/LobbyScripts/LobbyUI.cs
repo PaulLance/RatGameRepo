@@ -76,7 +76,7 @@ public class LobbyUI : MonoBehaviour
     {
         DestroyActionsArea();
         friendListArea.GetComponent<CanvasGroup>().alpha = 1;
-        friendListArea.GetComponent<CanvasGroup>().interactable = true;
+        friendListArea.GetComponent<CanvasGroup>().blocksRaycasts = true;
         addFriendsArea.SetActive(false);
         invintationArea.SetActive(false);
 
@@ -96,7 +96,7 @@ public class LobbyUI : MonoBehaviour
     {
         DestroyActionsArea();
         friendListArea.GetComponent<CanvasGroup>().alpha = 0;
-        friendListArea.GetComponent<CanvasGroup>().interactable = false;
+        friendListArea.GetComponent<CanvasGroup>().blocksRaycasts = false;
         addFriendsArea.SetActive(true);
         invintationArea.SetActive(false);
 
@@ -106,7 +106,7 @@ public class LobbyUI : MonoBehaviour
     {
         DestroyActionsArea();
         friendListArea.GetComponent<CanvasGroup>().alpha = 0;
-        friendListArea.GetComponent<CanvasGroup>().interactable = false;
+        friendListArea.GetComponent<CanvasGroup>().blocksRaycasts = false;
         addFriendsArea.SetActive(false);
         invintationArea.SetActive(true);
     }
