@@ -62,13 +62,19 @@ public class MainLoobyManager : MonoBehaviourPunCallbacks
 
             Dictionary<int, string> newDict = new Dictionary<int, string>();
 
+
             for (int i = 0; i < keys.Length; i++)
             {
                 newDict.Add(keys[i], values[i]);
+                if (values[i]== PhotonNetwork.NickName)
+                {
+                    UpdateRoleOnPlayer(values[i], keys[i]);
+                }
             }
             dict = newDict;
             UpdateRoomDict();
-            UpdateRoleOnPlayer(values[0], keys[0]);
+            Debug.Log(values[0] + "VALUE");
+            
 
         }
 
