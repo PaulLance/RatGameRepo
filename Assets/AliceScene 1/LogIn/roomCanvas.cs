@@ -58,20 +58,36 @@ public class roomCanvas : MonoBehaviour
             GameObject obj = playersLabels.GetChild(i).gameObject;
             if (keys[i] == -1)
             {
-                obj.SetActive(false);
+                obj.GetComponent<Roles>().ClearRole();
                 obj.GetComponentInChildren<TextMeshProUGUI>().text = "";
+                obj.SetActive(false);
+
             }
-            else { 
-            
+            else {
+
                  obj.SetActive(true);
+                 Buttons(obj);
+                 obj.GetComponentInChildren<Roles>().SetRole(keys[i]);
                  obj.GetComponentInChildren<TextMeshProUGUI>().text = values[i];
              }
 
-           
+      
         }
 
         ActionsWhenFourPlayers();
 
+    }
+
+    private void Buttons(GameObject obj)
+    {
+         if (PhotonNetwork.IsMasterClient)
+         {
+            obj.GetComponent<Roles>().EnableButtons();
+         }
+        else
+         {
+            obj.GetComponent<Roles>().DisableButtons();
+         }
     }
 
     private void ActionsWhenFourPlayers()
@@ -137,6 +153,7 @@ public class roomCanvas : MonoBehaviour
         foreach (Transform child in playersLabels)
         {
             child.GetComponentInChildren<TextMeshProUGUI>().text = "";
+            child.GetComponent<Roles>().ClearRole();
             child.gameObject.SetActive(false);
         }
         canvasArea.SetActive(false);

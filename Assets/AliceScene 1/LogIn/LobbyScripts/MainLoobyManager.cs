@@ -28,10 +28,50 @@ public class MainLoobyManager : MonoBehaviourPunCallbacks
     {
         lobbyManager = this;
         InviteUI.OnAcceptNetwork += InintationAccept;
+        Roles.changeRole += ChangeRoles;
         for (int i=0; i<4; i++)
         {
             dict.Add(i, "");
         }
+    }
+
+    private void ChangeRoles(int oldNumber, int newNumber)
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            int[] keys = dict.Select(f => f.Key).ToArray();
+            string[] values = dict.Select(f => f.Value).ToArray();
+
+            int p = 0;
+            int m = 0;
+
+            for (int i=0; i<keys.Length; i++)
+            {
+                if (keys[i] == oldNumber)
+                {
+                    p = i;
+                }
+
+                if (keys[i] == newNumber)
+                {
+                    m = i;
+                }
+            }
+            keys[p] = newNumber;
+            keys[m] = oldNumber;
+
+            Dictionary<int, string> newDict = new Dictionary<int, string>();
+
+            for (int i = 0; i < keys.Length; i++)
+            {
+                newDict.Add(keys[i], values[i]);
+            }
+            dict = newDict;
+            UpdateRoomDict();
+            UpdateRoleOnPlayer(values[0], keys[0]);
+
+        }
+
     }
 
     private void Start()
@@ -68,9 +108,10 @@ public class MainLoobyManager : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsMasterClient)
         {
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < 4; i++)
+            {
 
-                if (string.IsNullOrEmpty(dict[i])) 
+                if (string.IsNullOrEmpty(dict[i]))
                 {
                     Debug.Log(i + "key");
                     Debug.Log(dict.Count);
@@ -78,14 +119,19 @@ public class MainLoobyManager : MonoBehaviourPunCallbacks
                     break;
                 }
             }
-           int[] keys=dict.Select(f => f.Key).ToArray();
-           string[] values = dict.Select(f => f.Value).ToArray();
-           photonView.RPC("UpdateDictionaries",RpcTarget.Others, keys, values);
-           UpdateInformation();
-           updateActionsArea?.Invoke();
+            UpdateRoomDict();
+            updateActionsArea?.Invoke();
         }
 
 
+    }
+
+    private void UpdateRoomDict()
+    {
+        int[] keys = dict.Select(f => f.Key).ToArray();
+        string[] values = dict.Select(f => f.Value).ToArray();
+        photonView.RPC("UpdateDictionaries", RpcTarget.Others, keys, values);
+        UpdateInformation();
     }
 
     [PunRPC]
@@ -120,12 +166,13 @@ public class MainLoobyManager : MonoBehaviourPunCallbacks
         int[] keys1=new int[4] { -1, -1, -1, -1 };
         string[] values = new string[4] { "", "", "", "" };
         int m = 0;
-        for (int i = 0; i < 4; i++)
+
+        foreach (KeyValuePair<int, string> d in dict)
         {
-            if (!string.IsNullOrEmpty(dict[i]))
+            if (!string.IsNullOrEmpty(d.Value))
             {
-                keys1[m] = i;
-                values[m] = dict[i];
+                keys1[m] = d.Key;
+                values[m] = d.Value;
             }
             else
             {
@@ -134,6 +181,21 @@ public class MainLoobyManager : MonoBehaviourPunCallbacks
             }
             m++;
         }
+
+        //for (int i = 0; i < 4; i++)
+        //{
+        //    if (!string.IsNullOrEmpty(dict[i]))
+        //    {
+        //        keys1[m] = i;  
+        //        values[m] = dict[i];
+        //    }
+        //    else
+        //    {
+        //        keys1[m] = -1;
+        //        values[m] = "";
+        //    }
+        //    m++;
+        //}
         updateRoomCanvas.Invoke(keys1,values);
     }
 
