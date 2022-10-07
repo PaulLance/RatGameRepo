@@ -48,6 +48,10 @@ public class DebugLogin : MonoBehaviour
         nameInput.text = loginData.LoginName;
         passwordInput.text = loginData.LoginPassword;
         loginButton.onClick.Invoke();
+        nameInput.enabled = false;
+        passwordInput.enabled = false;
+        loginButton.enabled = false;
+        gameObject.SetActive(false);
     }
 
     // Update is called once per frame
