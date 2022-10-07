@@ -29,4 +29,10 @@ public class playerData : MonoBehaviourPunCallbacks
         number = roleNumber;
         UpateRole.Invoke(number);
     }
+
+    public int GetNumber()
+    {
+        return number;
+    }
+
 }

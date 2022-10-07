@@ -281,10 +281,52 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
                     trapTypes[i] = (byte)Random.Range(0, Enum.GetValues(typeof(GameTeamManager.Trap.TrapType)).Length);
                 }
 
+
+                //PhotonView[] pv = FindObjectsOfType<PhotonView>();
+                playerData[] pds = FindObjectsOfType<playerData>();
+
+                int amountPlayers = 0;
+                List<PlayerType> currentTeamTypes = new List<PlayerType>(); // to make sure every team has every slot and not double
+
+
                 foreach (var playerEntry in PhotonNetwork.CurrentRoom.Players)
                 {
-                    PlayerType currentPlayerType = (PlayerType)currentPlayerTypeByte;
+                    //PlayerType currentPlayerType = (PlayerType)currentPlayerTypeByte; 
                     var player = playerEntry.Value;
+
+                    PhotonView playerView = null;
+                    playerData pd = null;
+                    for (int i = 0; i < pds.Length; i++)
+                    {
+                        var pv = pds[i].GetComponent<PhotonView>();
+                        if (pv && pv.Owner.ActorNumber == player.ActorNumber)
+                        {
+                            pd = pds[i];
+                            playerView = pv;
+                            break;
+                        }
+                    }
+
+                    if(playerView == null)
+                    {
+                        Debug.LogError("PV = NULL!!");
+                        return;
+                    }
+
+                    // Assign player type from role number now!
+                    int role = pd.GetNumber();
+                    Debug.Log("Player " + playerView.Owner.ActorNumber + " : "  + role);
+                    currentPlayerTypeByte = (byte)role;
+                    PlayerType currentPlayerType = (PlayerType)currentPlayerTypeByte;
+                    while (currentTeamTypes.Contains(currentPlayerType))
+                    {
+                        currentPlayerTypeByte = (byte)Random.Range(0, PLAYERS_PER_TEAM);
+                        currentPlayerType = (PlayerType)currentPlayerTypeByte;
+                    }
+                    currentTeamTypes.Add(currentPlayerType);
+                    pd.SetRole(currentPlayerTypeByte);
+
+
                     object[] content;
 
                     content = new object[] { 
@@ -310,10 +352,20 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
                     //PhotonNetwork.RPC("DoSetup", player, currentPlayerType);
 
-                    currentPlayerTypeByte++;
-                    if (currentPlayerTypeByte >= PLAYERS_PER_TEAM)
+                    //currentPlayerTypeByte++;
+                    //if (currentPlayerTypeByte >= PLAYERS_PER_TEAM)
+                    //{
+                    //    currentPlayerTypeByte = 0;
+                    //    teamNum++;
+                    //}
+                    
+
+                    // temporary team number setter ... 
+                    // TODO : replace it with actual team 
+                    amountPlayers++;
+                    if(amountPlayers >= PLAYERS_PER_TEAM)
                     {
-                        currentPlayerTypeByte = 0;
+                        currentTeamTypes = new List<PlayerType>();
                         teamNum++;
                     }
                 }
