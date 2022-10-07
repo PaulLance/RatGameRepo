@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/LOBBYWithDebug.unity
+    guid: 425bea417e38d47418a64909841603d9
+  - enabled: 1
     path: Assets/LOBBY.unity
     guid: 15a30a62267a4b8478a687ac6bf99cf3
   - enabled: 1
