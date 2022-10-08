@@ -103,6 +103,7 @@ public class roomCanvas : MonoBehaviour
         }
         if (playersInRoom == 1)
         {
+            FindObjectOfType<MainLoobyManager>().ClearDict();
             ClearRoomCanvas();
         }
     }

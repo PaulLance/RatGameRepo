@@ -22,6 +22,8 @@ public class MainLoobyManager : MonoBehaviourPunCallbacks
     public static Action updateActionsArea;
     public Dictionary<int, string> dict = new Dictionary<int, string>();
     PhotonView photonView;
+    Dictionary<string, playerData> playerdict = new Dictionary<string, playerData>();
+    playerData data;
 
 
     private void Awake()
@@ -29,7 +31,8 @@ public class MainLoobyManager : MonoBehaviourPunCallbacks
         lobbyManager = this;
         InviteUI.OnAcceptNetwork += InintationAccept;
         Roles.changeRole += ChangeRoles;
-        for (int i=0; i<4; i++)
+        photonView = GetComponent<PhotonView>();
+        for (int i = 0; i < 4; i++)
         {
             dict.Add(i, "");
         }
@@ -45,7 +48,7 @@ public class MainLoobyManager : MonoBehaviourPunCallbacks
             int p = 0;
             int m = 0;
 
-            for (int i=0; i<keys.Length; i++)
+            for (int i = 0; i < keys.Length; i++)
             {
                 if (keys[i] == oldNumber)
                 {
@@ -62,19 +65,16 @@ public class MainLoobyManager : MonoBehaviourPunCallbacks
 
             Dictionary<int, string> newDict = new Dictionary<int, string>();
 
-
+            playerData[] datas = FindObjectsOfType<playerData>();
+            Debug.Log(datas.Length + "length");
             for (int i = 0; i < keys.Length; i++)
             {
                 newDict.Add(keys[i], values[i]);
-                if (values[i]== PhotonNetwork.NickName)
-                {
-                    UpdateRoleOnPlayer(values[i], keys[i]);
-                }
             }
             dict = newDict;
             UpdateRoomDict();
             Debug.Log(values[0] + "VALUE");
-            
+
 
         }
 
@@ -104,6 +104,7 @@ public class MainLoobyManager : MonoBehaviourPunCallbacks
 
     private void JoinPlayerRoom()
     {
+        Debug.Log(80);
         string roomName = PlayerPrefs.GetString("ROOM");
         PlayerPrefs.SetString("ROOM", "");
         PhotonNetwork.JoinRoom(roomName);
@@ -136,7 +137,7 @@ public class MainLoobyManager : MonoBehaviourPunCallbacks
     {
         int[] keys = dict.Select(f => f.Key).ToArray();
         string[] values = dict.Select(f => f.Value).ToArray();
-        photonView.RPC("UpdateDictionaries", RpcTarget.Others, keys, values);
+        photonView.RPC("UpdateDictionaries", RpcTarget.All, keys, values);
         UpdateInformation();
     }
 
@@ -145,31 +146,27 @@ public class MainLoobyManager : MonoBehaviourPunCallbacks
     public void UpdateDictionaries(int[] keys, string[] values)
     {
         Dictionary<int, string> newDict = new Dictionary<int, string>();
-        for (int i=0; i<keys.Length; i++)
+        List<playerData> datas = FindObjectsOfType<playerData>().ToList();
+        Debug.Log(datas.Count);
+
+
+        for (int i = 0; i < keys.Length; i++)
         {
             newDict[keys[i]] = values[i];
-            UpdateRoleOnPlayer(values[i], keys[i]);
+            if (PhotonNetwork.LocalPlayer.NickName == values[i])
+            {
+                data.SetRole(keys[i]);
+            }
+        
         }
         dict = newDict;
 
     }
 
-    private void UpdateRoleOnPlayer(string value, int key)
-    {
-        if (string.Equals(value, PhotonNetwork.LocalPlayer.NickName))
-        {
-            playerData data=FindObjectOfType<playerData>();
-            Debug.Log(data);
-            if (data != null)
-            {
-                data.SetRole(key);
-            }
-        }
-    }
 
     private void UpdateInformation()
     {
-        int[] keys1=new int[4] { -1, -1, -1, -1 };
+        int[] keys1 = new int[4] { -1, -1, -1, -1 };
         string[] values = new string[4] { "", "", "", "" };
         int m = 0;
 
@@ -188,21 +185,8 @@ public class MainLoobyManager : MonoBehaviourPunCallbacks
             m++;
         }
 
-        //for (int i = 0; i < 4; i++)
-        //{
-        //    if (!string.IsNullOrEmpty(dict[i]))
-        //    {
-        //        keys1[m] = i;  
-        //        values[m] = dict[i];
-        //    }
-        //    else
-        //    {
-        //        keys1[m] = -1;
-        //        values[m] = "";
-        //    }
-        //    m++;
-        //}
-        updateRoomCanvas.Invoke(keys1,values);
+
+        updateRoomCanvas.Invoke(keys1, values);
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
@@ -211,7 +195,7 @@ public class MainLoobyManager : MonoBehaviourPunCallbacks
         {
             foreach (KeyValuePair<int, string> pair in dict)
             {
-                if (string.Equals(pair.Value,otherPlayer.NickName))
+                if (string.Equals(pair.Value, otherPlayer.NickName))
                 {
                     dict[pair.Key] = "";
                     break;
@@ -252,7 +236,7 @@ public class MainLoobyManager : MonoBehaviourPunCallbacks
         string roomName = PlayerPrefs.GetString("ROOM");
         if (!string.IsNullOrEmpty(roomName))
         {
-           JoinPlayerRoom();
+            JoinPlayerRoom();
         }
         else
         {
@@ -268,7 +252,7 @@ public class MainLoobyManager : MonoBehaviourPunCallbacks
         roomOptions.IsVisible = false;
         roomOptions.MaxPlayers = 4;
         roomOptions.PublishUserId = true;
-        string roomName=System.Guid.NewGuid().ToString();
+        string roomName = System.Guid.NewGuid().ToString();
         PhotonNetwork.CreateRoom(roomName, roomOptions, TypedLobby.Default);
     }
 
@@ -281,19 +265,33 @@ public class MainLoobyManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        PhotonNetwork.Instantiate("PlayerData", Vector3.zero, Quaternion.identity);
-        dict[0] = PhotonNetwork.LocalPlayer.NickName;
-        UpdateRoleOnPlayer(PhotonNetwork.LocalPlayer.NickName, 0);
+        GameObject player = PhotonNetwork.Instantiate("PlayerData", Vector3.zero, Quaternion.identity);
+        data = player.GetComponent<playerData>();
+        playerdict.Add(PhotonNetwork.NickName, player.GetComponent<playerData>());
+        if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
+        {
+            dict[0] = PhotonNetwork.LocalPlayer.NickName;
+        }
     }
 
     public override void OnLeftRoom()
     {
+        playerdict.Remove(PhotonNetwork.NickName);
         clearRoomCanvas.Invoke();
-        for (int i=0; i<4; i++)
+        ClearDict();
+        data = null;
+    }
+
+    public void ClearDict()
+    {
+        for (int i = 0; i < 4; i++)
         {
             dict[i] = "";
         }
-
+        dict[0]= PhotonNetwork.LocalPlayer.NickName;
     }
 
 }
+
+
+

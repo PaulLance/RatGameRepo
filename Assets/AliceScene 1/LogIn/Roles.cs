@@ -35,7 +35,6 @@ public class Roles : MonoBehaviour
     public void Back()
     {
         if (roleNumber == -1) { return; }
-        Debug.Log(99);
         int newNumber = roleNumber - 1;
         if (newNumber < 0)
         {
