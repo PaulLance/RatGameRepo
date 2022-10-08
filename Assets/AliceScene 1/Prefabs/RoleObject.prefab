@@ -53,18 +53,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainImage: {fileID: 9073366513973882593}
   sprites:
+  - sprite: {fileID: 21300000, guid: 7530697e866275a4c90bb897255e5937, type: 3}
+    width: 130
+    height: 101
+  - sprite: {fileID: 21300000, guid: 994b9fe8630b31948a9b521e59a515a0, type: 3}
+    width: 170
+    height: 170
   - sprite: {fileID: 21300000, guid: 6973e84554b0db045ae3d1e08da9f5e3, type: 3}
     width: 125
     height: 101
   - sprite: {fileID: 21300000, guid: 9dba1339116f16249b657707bc5745f6, type: 3}
     width: 61
     height: 107
-  - sprite: {fileID: 21300000, guid: 994b9fe8630b31948a9b521e59a515a0, type: 3}
-    width: 170
-    height: 170
-  - sprite: {fileID: 21300000, guid: 7530697e866275a4c90bb897255e5937, type: 3}
-    width: 130
-    height: 101
   buttons: {fileID: 7866135729249407636}
 --- !u!1 &3199052238153520943
 GameObject:
