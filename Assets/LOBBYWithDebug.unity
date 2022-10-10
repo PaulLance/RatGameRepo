@@ -1816,6 +1816,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1768424885, guid: bbdbe0487c8e03e459deacab0a513a02, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 820640298}
+    - target: {fileID: 1768424885, guid: bbdbe0487c8e03e459deacab0a513a02, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SoloPlay
+      objectReference: {fileID: 0}
     - target: {fileID: 2592079494606335440, guid: bbdbe0487c8e03e459deacab0a513a02, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

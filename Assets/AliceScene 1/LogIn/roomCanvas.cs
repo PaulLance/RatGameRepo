@@ -164,6 +164,6 @@ public class roomCanvas : MonoBehaviour
 
     public void PlayTeam()
     {
-        PhotonNetwork.LoadLevel("MainGame");
+        PhotonNetwork.LoadLevel(2);
     }
 }

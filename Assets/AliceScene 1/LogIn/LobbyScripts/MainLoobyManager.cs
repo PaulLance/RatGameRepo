@@ -24,6 +24,7 @@ public class MainLoobyManager : MonoBehaviourPunCallbacks
     PhotonView photonView;
     Dictionary<string, playerData> playerdict = new Dictionary<string, playerData>();
     playerData data;
+    bool shouldJoinRandom = false;
 
 
     private void Awake()
@@ -233,7 +234,16 @@ public class MainLoobyManager : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         FindObjectOfType<PlayfabFriendSystem>().FriendList();
+
+        if (shouldJoinRandom == true)
+        {
+            PhotonNetwork.JoinRandomRoom();
+            shouldJoinRandom = false;
+            return;
+        }
+
         string roomName = PlayerPrefs.GetString("ROOM");
+     
         if (!string.IsNullOrEmpty(roomName))
         {
             JoinPlayerRoom();
@@ -249,7 +259,7 @@ public class MainLoobyManager : MonoBehaviourPunCallbacks
     {
         RoomOptions roomOptions = new RoomOptions();
         roomOptions.IsOpen = true;
-        roomOptions.IsVisible = false;
+        roomOptions.IsVisible = true;
         roomOptions.MaxPlayers = 4;
         roomOptions.PublishUserId = true;
         string roomName = System.Guid.NewGuid().ToString();
@@ -259,7 +269,13 @@ public class MainLoobyManager : MonoBehaviourPunCallbacks
 
     public void SoloPlay()
     {
-        PhotonNetwork.JoinRandomOrCreateRoom();
+        PhotonNetwork.LeaveRoom();
+        shouldJoinRandom = true;
+    }
+
+    public override void OnJoinRandomFailed(short returnCode, string message)
+    {
+        Debug.Log(message);
     }
 
 

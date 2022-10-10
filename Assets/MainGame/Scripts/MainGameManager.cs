@@ -33,6 +33,8 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public byte MyTeamNum;
 
+    [SerializeField] Transform pointToCreate;
+
     public enum PlayerType : byte
     {
         Movement = 0,
@@ -178,7 +180,7 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
                 {
                     Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManagerHelper.ActiveSceneName);
                     // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
-                    GameObject newObject = PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
+                    GameObject newObject = PhotonNetwork.Instantiate(this.playerPrefab.name, pointToCreate.position, Quaternion.identity, 0);
                     TestPlayerManager tpm = newObject.GetComponent<TestPlayerManager>();
                     tpm.TeamNum = teamNum;
                 }
