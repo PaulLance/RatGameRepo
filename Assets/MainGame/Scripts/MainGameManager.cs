@@ -130,8 +130,8 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
                 enableTrigger = false;
             }
 
-            cheeseObj.GetComponent<MeshRenderer>().enabled = enableMeshRenderer;
-            cheeseObj.GetComponent<Collider>().enabled = enableTrigger;
+            cheeseObj.GetComponentInChildren<MeshRenderer>().enabled = enableMeshRenderer;
+            cheeseObj.GetComponentInChildren<Collider>().enabled = enableTrigger;
 
         }
 
@@ -158,8 +158,8 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
                 enableTrigger = false;
             }
 
-            trapObj.GetComponent<MeshRenderer>().enabled = enableMeshRenderer;
-            trapObj.GetComponent<Collider>().enabled = enableTrigger;
+            trapObj.GetComponentInChildren<MeshRenderer>().enabled = enableMeshRenderer;
+            trapObj.GetComponentInChildren<Collider>().enabled = enableTrigger;
         }
 
         gameTeamManagers[teamNum].SetCheeseLocations(cheeseLocations, cheeseObjects);
