@@ -21,10 +21,16 @@ public class CatAI : MonoBehaviour
     {
         if(target == null)
         {
-            target = FindObjectOfType<ThirdPersonUserControl>().transform;
+            ThirdPersonUserControl tpuc = FindObjectOfType<ThirdPersonUserControl>();
+            if (tpuc)
+            {
+                target = tpuc.transform;
+            }
         }
-
-        navAgent.SetDestination(target.position);
+        else
+        {
+            navAgent.SetDestination(target.position);
+        }
         
     }
 }
