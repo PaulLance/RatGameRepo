@@ -7,7 +7,7 @@ public class CamSetter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        FindObjectOfType<CameraMovement>().cameraTarget = this.transform;
+        FindObjectOfType<CameraMovementBizzy>().cameraTarget = this.transform;
     }
 
     // Update is called once per frame

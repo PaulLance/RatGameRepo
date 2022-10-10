@@ -1266,14 +1266,6 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 7096818897669474396, guid: 49481a0091103964bbc89a7311e70b60, type: 3}
-      propertyPath: trapPrefab
-      value: 
-      objectReference: {fileID: 2891400904668266011, guid: aff5fdcc0a755464486fe1d277699dc3, type: 3}
-    - target: {fileID: 7096818897669474396, guid: 49481a0091103964bbc89a7311e70b60, type: 3}
-      propertyPath: cheesePrefab
-      value: 
-      objectReference: {fileID: 7067488152017934995, guid: dc563d02c34e78e47899315015091baf, type: 3}
     - target: {fileID: 7096818897669474397, guid: 49481a0091103964bbc89a7311e70b60, type: 3}
       propertyPath: m_Name
       value: MainGameManager

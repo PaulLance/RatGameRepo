@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
-public class CameraMovement : MonoBehaviour
+public class CameraMovementBizzy : MonoBehaviour
 {
     public Transform cameraTarget;
 
