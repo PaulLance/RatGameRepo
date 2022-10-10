@@ -1,3 +1,7 @@
+/*
+ * Script by Bizzy (Bizzy Bee Creator)
+ * License: Contact me for acquiring one!
+ */
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
