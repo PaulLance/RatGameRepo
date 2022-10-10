@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51b78a31a9982e647a19a7c669cd76a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 1577346132932419227, guid: afae168f66e8f2a499aedaf8107dc1b2, type: 3}
+  playerPrefab: {fileID: 7510067570896934033, guid: 98e48df1397914d43b170b5b8d44f2f2, type: 3}
   cheesePrefab: {fileID: 7067488152017934995, guid: dc563d02c34e78e47899315015091baf, type: 3}
   trapPrefab: {fileID: 2891400904668266011, guid: aff5fdcc0a755464486fe1d277699dc3, type: 3}
   DBG_FULL_TEAMS: 0
