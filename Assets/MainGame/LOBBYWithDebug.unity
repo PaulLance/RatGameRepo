@@ -717,6 +717,8 @@ MonoBehaviour:
     LoginPassword: 123456
   - LoginName: BigRat
     LoginPassword: 123456
+  - LoginName: testxyz
+    LoginPassword: testxyz
   loginButtonPrefab: {fileID: 9046882684392446987, guid: 2a9b0d8f2ab71f5498225e413ffc6dce, type: 3}
   buttonsParent: {fileID: 59185744}
   nameInput: {fileID: 1279438752}

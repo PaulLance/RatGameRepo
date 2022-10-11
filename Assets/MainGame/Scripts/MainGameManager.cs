@@ -279,7 +279,7 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
                 byte[] trapTypes = new byte[TRAPS_AMOUNT];
                 for (int i = 0; i < trapLocations.Length; i++)
                 {
-                    trapLocations[i] = new Vector3(Random.Range(-35, 35), 0.625f, Random.Range(-35, 35));
+                    trapLocations[i] = new Vector3(Random.Range(-35, 35), -1.22f, Random.Range(-35, 35));
                     trapTypes[i] = (byte)Random.Range(0, Enum.GetValues(typeof(GameTeamManager.Trap.TrapType)).Length);
                 }
 
