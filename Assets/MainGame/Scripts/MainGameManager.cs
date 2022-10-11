@@ -20,7 +20,7 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public const int NUMBER_OF_TEAMS = 2;
     public const int PLAYERS_PER_TEAM = 4;
-    public const int CHEESE_AMOUNT = 20;
+    public const int CHEESE_AMOUNT = 25;
     public const int TRAPS_AMOUNT = 45;
 
     GameTeamManager[] gameTeamManagers;
@@ -273,7 +273,7 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
                 Vector3[] cheeseLocations = new Vector3[CHEESE_AMOUNT];
                 for (int i = 0; i < cheeseLocations.Length; i++)
                 {
-                    cheeseLocations[i] = new Vector3(Random.Range(-10, 10), Random.Range(1.5f, 2.5f), Random.Range(-10, 10));
+                    cheeseLocations[i] = new Vector3(Random.Range(16.5f, 31.0f), Random.Range(-0.5f, 0.25f), Random.Range(17.5f, 32.5f));
                 }
                 Vector3[] trapLocations = new Vector3[TRAPS_AMOUNT];
                 byte[] trapTypes = new byte[TRAPS_AMOUNT];
