@@ -42,7 +42,7 @@ public class PlayerAnimatorManager : MonoBehaviourPun
         {
             return;
         }
-        if (tpm.isStunned)
+        if (tpm.tpuc.isStunned)
         {
             animator.SetFloat("Speed", 0);
             return;

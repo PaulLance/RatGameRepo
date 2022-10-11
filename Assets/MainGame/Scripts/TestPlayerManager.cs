@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityStandardAssets.Characters.ThirdPerson;
 
 public class TestPlayerManager : MonoBehaviourPunCallbacks, IPunObservable
 {
@@ -21,7 +22,7 @@ public class TestPlayerManager : MonoBehaviourPunCallbacks, IPunObservable
     private GameObject beams;
     //True, when the user is firing
     bool IsFiring;
-    public bool isStunned = false;
+    public ThirdPersonUserControl tpuc;
     public MainGameManager.PlayerType playerType;
     #endregion
 
@@ -75,6 +76,8 @@ void OnLevelWasLoaded(int level)
             beams.SetActive(false);
         }
 
+        tpuc = GetComponent<ThirdPersonUserControl>();
+
         // #Important
         // used in GameManager.cs: we keep track of the localPlayer instance to prevent instantiation when levels are synchronized
         if (photonView.IsMine)
@@ -121,7 +124,7 @@ void OnLevelWasLoaded(int level)
             beams.SetActive(IsFiring);
         }
 
-        if (photonView.IsMine && !isStunned)
+        if (photonView.IsMine && !tpuc.isStunned)
         {
             ProcessInputs();
 
@@ -195,16 +198,16 @@ void OnLevelWasLoaded(int level)
     private void StunSelf()
     {
         // TODO PLAY ANIMATION OF STUN!
-        isStunned = true;
+        tpuc.isStunned = true;
         StartCoroutine(CantMove());
 
     }
 
     IEnumerator CantMove()
     {
-        isStunned = true;
+        tpuc.isStunned = true;
         yield return new WaitForSeconds(1.5f);
-        isStunned = false;
+        tpuc.isStunned = false;
     }
 
 
