@@ -18,6 +18,8 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
     public GameObject trapPrefab;
     public static MainGameManager Instance;
 
+    public Transform[] mouseTrapPositions;
+
     public const int NUMBER_OF_TEAMS = 2;
     public const int PLAYERS_PER_TEAM = 4;
     public const int CHEESE_AMOUNT = 25;
@@ -275,11 +277,14 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
                 {
                     cheeseLocations[i] = new Vector3(Random.Range(16.5f, 31.0f), Random.Range(-0.5f, 0.25f), Random.Range(17.5f, 32.5f));
                 }
-                Vector3[] trapLocations = new Vector3[TRAPS_AMOUNT];
-                byte[] trapTypes = new byte[TRAPS_AMOUNT];
+                //Vector3[] trapLocations = new Vector3[TRAPS_AMOUNT];
+                //byte[] trapTypes = new byte[TRAPS_AMOUNT];
+                Vector3[] trapLocations = new Vector3[mouseTrapPositions.Length];
+                byte[] trapTypes = new byte[mouseTrapPositions.Length];
                 for (int i = 0; i < trapLocations.Length; i++)
                 {
-                    trapLocations[i] = new Vector3(Random.Range(-35, 35), -1.22f, Random.Range(-35, 35));
+                    //trapLocations[i] = new Vector3(Random.Range(-35, 35), -1.22f, Random.Range(-35, 35));
+                    trapLocations[i] = mouseTrapPositions[i].position;
                     trapTypes[i] = (byte)Random.Range(0, Enum.GetValues(typeof(GameTeamManager.Trap.TrapType)).Length);
                 }
 
