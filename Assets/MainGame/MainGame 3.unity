@@ -15967,6 +15967,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerMouseController
       objectReference: {fileID: 0}
+    - target: {fileID: 7510067570896934033, guid: 98e48df1397914d43b170b5b8d44f2f2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8588559532274459359, guid: 98e48df1397914d43b170b5b8d44f2f2, type: 3}
       propertyPath: sceneViewId
       value: 2
@@ -18220,7 +18224,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 6fe8f87103012694d88c0eead82a96f0, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.15
   m_Pitch: 1
   Loop: 0
   Mute: 0
