@@ -21,6 +21,24 @@ public class LogInUI : MonoBehaviour
     [SerializeField] GameObject RegisterForm;
     [SerializeField] GameObject LogInRegisterCanvas;
 
+    [SerializeField] TextMeshProUGUI errorText;
+    [SerializeField] GameObject errorField;
+ 
+    private void Awake()
+    {
+        PlayfabAuth.errorToLogIn += LogInError;
+    }
+
+    public void CloseErrorField()
+    {
+        errorField.SetActive(false);
+    }
+
+    public void LogInError(string error)
+    {
+        errorField.SetActive(true);
+        errorText.text = "Incorrect username or password.";
+    }
 
 
     private void Start()

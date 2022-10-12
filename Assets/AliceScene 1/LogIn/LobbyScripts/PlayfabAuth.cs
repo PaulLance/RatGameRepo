@@ -16,6 +16,7 @@ public class PlayfabAuth : MonoBehaviour
     string name;
 
     RegisterPlayFabUserRequest registerRequest;
+    public static Action<string> errorToLogIn;
 
 
     private void Start()
@@ -56,7 +57,7 @@ public class PlayfabAuth : MonoBehaviour
     private void OnFailure(PlayFabError error)
     {
         IsAuthenticated = false;
-        Debug.Log(error.GenerateErrorReport());
+        errorToLogIn.Invoke(error.GenerateErrorReport());
 
     }
 
