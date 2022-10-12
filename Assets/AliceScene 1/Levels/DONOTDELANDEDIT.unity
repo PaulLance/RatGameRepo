@@ -1230,6 +1230,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 349908502164150931, guid: fd182f7b02cbb7a478dbc8196afb4d85, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 349908502164150931, guid: fd182f7b02cbb7a478dbc8196afb4d85, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 349908502164150931, guid: fd182f7b02cbb7a478dbc8196afb4d85, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 349908502164150931, guid: fd182f7b02cbb7a478dbc8196afb4d85, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 349908502164150931, guid: fd182f7b02cbb7a478dbc8196afb4d85, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1329260691894268981, guid: fd182f7b02cbb7a478dbc8196afb4d85, type: 3}
       propertyPath: LogInRegisterCanvas
       value: 
@@ -1301,6 +1321,10 @@ PrefabInstance:
     - target: {fileID: 2300768641418345007, guid: fd182f7b02cbb7a478dbc8196afb4d85, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: PlayfabAuth, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2300768641713917377, guid: fd182f7b02cbb7a478dbc8196afb4d85, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2300768642232326508, guid: fd182f7b02cbb7a478dbc8196afb4d85, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
