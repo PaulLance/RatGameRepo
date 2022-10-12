@@ -286,12 +286,12 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
                 }
                 //Vector3[] trapLocations = new Vector3[TRAPS_AMOUNT];
                 //byte[] trapTypes = new byte[TRAPS_AMOUNT];
-                Vector3[] trapLocations = new Vector3[mouseTrapPositions.Length];
-                byte[] trapTypes = new byte[mouseTrapPositions.Length];
+                Vector3[] trapLocations = new Vector3[mouseTrapSavedPositions.Length];
+                byte[] trapTypes = new byte[mouseTrapSavedPositions.Length];
                 for (int i = 0; i < trapLocations.Length; i++)
                 {
                     //trapLocations[i] = new Vector3(Random.Range(-35, 35), -1.22f, Random.Range(-35, 35));
-                    trapLocations[i] = mouseTrapPositions[i].position;
+                    trapLocations[i] = mouseTrapSavedPositions[i];
                     trapTypes[i] = (byte)Random.Range(0, Enum.GetValues(typeof(GameTeamManager.Trap.TrapType)).Length);
                 }
 
