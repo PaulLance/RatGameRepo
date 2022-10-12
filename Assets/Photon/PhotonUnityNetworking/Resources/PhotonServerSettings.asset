@@ -49,6 +49,7 @@ MonoBehaviour:
   - UpdateCanvas
   - CanvasActionsRemove
   - UpdateDictionaries
+  - EnableWall
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

@@ -6,7 +6,8 @@ public class RoundMove : MonoBehaviour
 {
     [SerializeField] Transform center;
     [SerializeField] float radius;
-    [SerializeField] float speed;
+    float speed;
+    [SerializeField] float value;
     [SerializeField] float minAngle;
     [SerializeField] float maxAngle;
 
@@ -25,11 +26,11 @@ public class RoundMove : MonoBehaviour
         transform.position = new Vector3(posX, transform.position.y, posZ);
         if (angle <= minAngle)  //-3.7f
         {
-            speed = 1;
+            speed = value;
         }
         if (angle >= maxAngle) //-0.79f
         {
-            speed = -1;
+            speed = -value;
         }
 
 

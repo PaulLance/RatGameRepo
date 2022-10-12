@@ -8,18 +8,20 @@ public class CatAI : MonoBehaviour
 {
     public Transform target;
     public NavMeshAgent navAgent;
+    bool canChase = false;
 
 
-    // Start is called before the first frame update
-    void Start()
+    public void EnableChase()
     {
-        
+        canChase = true;
     }
 
-    // Update is called once per frame
+   
+
     void Update()
     {
-        if(target == null)
+        if (canChase == false) { return; }
+        if (target == null)
         {
             ThirdPersonUserControl tpuc = FindObjectOfType<ThirdPersonUserControl>();
             if (tpuc)
