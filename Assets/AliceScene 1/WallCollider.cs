@@ -20,7 +20,13 @@ public class WallCollider : MonoBehaviourPunCallbacks
     {
         if (other.gameObject.tag == "Player")
         {
-            photonView.RPC("EnableWall", RpcTarget.All);
+            wall.SetActive(true);
+            CatAI[] cats = FindObjectsOfType<CatAI>();
+            foreach (CatAI cat in cats)
+            {
+                cat.EnableChase();
+            }
+            photonView.RPC("EnableWall", RpcTarget.Others);
 
         }
     }
