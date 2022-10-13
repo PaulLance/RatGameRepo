@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 7096818897669474399}
   - component: {fileID: 7096818897669474396}
   - component: {fileID: 7096818896707295659}
+  - component: {fileID: 7096818896707295660}
+  - component: {fileID: 3044806854274903983}
   m_Layer: 0
   m_Name: MainGameManager
   m_TagString: Untagged
@@ -46,7 +48,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 7510067570896934033, guid: 98e48df1397914d43b170b5b8d44f2f2, type: 3}
   cheesePrefab: {fileID: 7067488152017934995, guid: dc563d02c34e78e47899315015091baf, type: 3}
-  trapPrefab: {fileID: 2891400904668266011, guid: aff5fdcc0a755464486fe1d277699dc3, type: 3}
+  trapPrefab: {fileID: 138132109366295814, guid: 6d52ba1448ddd664d9f85e325ada707f, type: 3}
+  mouseTrapPositions:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  mouseTrapSavedPositions: []
   DBG_FULL_TEAMS: 0
   MyTeamNum: 0
   pointToCreate: {fileID: 0}
@@ -72,3 +84,123 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!82 &7096818896707295660
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7096818897669474397}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: f84e1e40ea72801488de381c9947735f, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 0.15
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &3044806854274903983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7096818897669474397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97e83669afcfd1f4d87420078b0aff94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cheeseCollectClips:
+  - {fileID: 8300000, guid: bca634ed334bae64aa24e3d7abe72a64, type: 3}
+  - {fileID: 8300000, guid: 2484d68330ac8ca479cd1c7471bcdbc5, type: 3}
+  - {fileID: 8300000, guid: 0128368a020eff7489d4dd0c84a691ec, type: 3}
+  - {fileID: 8300000, guid: b6fe00d97a7c0674bb9e83273ad40312, type: 3}
+  - {fileID: 8300000, guid: f0b01f33ca9a0b04a9abbaa469446c17, type: 3}
+  - {fileID: 8300000, guid: 649e98feccb83dc4e8418e133b44c56a, type: 3}
+  musicSrc: {fileID: 7096818896707295660}
+  initialMusicClip: {fileID: 8300000, guid: da2dfb33eda7a8e408e1bd28a41f215e, type: 3}
+  laserBurnClip: {fileID: 8300000, guid: 766a15a0bdc9991459f24ea0d807cc30, type: 3}
+  mewoClip: {fileID: 8300000, guid: 1d4d21d3163ac6b458e523ae1cdaae8a, type: 3}
+  mouseTrapClip: {fileID: 8300000, guid: cc35a41a29e5e92428e84924aee73b6a, type: 3}

@@ -67,6 +67,7 @@ void OnLevelWasLoaded(int level)
     /// </summary>
     void Awake()
     {
+        /*
         if (beams == null)
         {
             Debug.LogError("<Color=Red><a>Missing</a></Color> Beams Reference.", this);
@@ -75,6 +76,7 @@ void OnLevelWasLoaded(int level)
         {
             beams.SetActive(false);
         }
+        */
 
         tpuc = GetComponent<ThirdPersonUserControl>();
 
@@ -92,6 +94,7 @@ void OnLevelWasLoaded(int level)
 
     void Start()
     {
+        /*
         CameraWork _cameraWork = this.gameObject.GetComponent<CameraWork>();
 
 
@@ -106,6 +109,7 @@ void OnLevelWasLoaded(int level)
         {
             Debug.LogError("<Color=Red><a>Missing</a></Color> CameraWork Component on playerPrefab.", this);
         }
+        */
 #if UNITY_5_4_OR_NEWER
         // Unity 5.4 has a new scene management. register a method to call CalledOnLevelWasLoaded.
         UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;

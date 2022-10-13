@@ -10,6 +10,9 @@ public class AudioManager : MonoBehaviour
     public AudioClip[] cheeseCollectClips;
     private int currentCheeseIndex = 0;
 
+    public AudioSource musicSrc;
+    public AudioClip initialMusicClip;
+
     public AudioClip laserBurnClip;
     public AudioClip mewoClip;
     public AudioClip mouseTrapClip;
@@ -24,7 +27,8 @@ public class AudioManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        musicSrc.PlayOneShot(initialMusicClip);
+        musicSrc.PlayScheduled(AudioSettings.dspTime + initialMusicClip.length);
     }
 
     // Update is called once per frame
