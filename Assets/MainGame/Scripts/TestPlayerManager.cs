@@ -186,7 +186,17 @@ void OnLevelWasLoaded(int level)
         {
             StunSelf();
         }
+        if (other.CompareTag("Boost"))
+        {
+            BoostSpeed();
+            other.enabled = false;
+        }
 
+    }
+
+    private void BoostSpeed()
+    {
+        tpuc.BoostSpeed();
     }
 
     private void CollectCheese(GameObject gameObject)

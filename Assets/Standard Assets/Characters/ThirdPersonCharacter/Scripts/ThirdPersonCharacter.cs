@@ -43,7 +43,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		}
 
 
-		public void Move(Vector3 move, bool crouch, bool jump)
+		public void Move(Vector3 move, bool crouch, bool jump, float speed)
 		{
 
 			// convert the world relative moveInput vector into a local-relative
@@ -72,7 +72,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			PreventStandingInLowHeadroom();
 
 			// send input and other state parameters to the animator
-			UpdateAnimator(move);
+			UpdateAnimator(move, speed);
 		}
 
 
@@ -115,7 +115,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		}
 
 
-		void UpdateAnimator(Vector3 move)
+		void UpdateAnimator(Vector3 move, float speed)
 		{
 			// update the animator parameters
 			m_Animator.SetFloat("Forward", m_ForwardAmount, 0.1f, Time.deltaTime);
@@ -143,7 +143,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			// which affects the movement speed because of the root motion.
 			if (m_IsGrounded && move.magnitude > 0)
 			{
-				m_Animator.speed = m_AnimSpeedMultiplier;
+				m_Animator.speed = m_AnimSpeedMultiplier * speed;
 			}
 			else
 			{

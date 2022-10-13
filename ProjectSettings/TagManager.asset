@@ -8,6 +8,7 @@ TagManager:
   - Trap
   - notification
   - wallCollider
+  - Boost
   layers:
   - Default
   - TransparentFX

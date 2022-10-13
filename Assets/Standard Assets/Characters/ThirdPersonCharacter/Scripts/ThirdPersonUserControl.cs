@@ -1,5 +1,6 @@
 using Photon.Pun;
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 
@@ -15,7 +16,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         private bool m_Jump;                      // the world-relative desired move direction, calculated from the camForward and user input.
 
         public bool isStunned = false;
-
+        public float boostMultiplier = 4.0f;
+        private float boostSpeed = 1.0f;
 
         private void Start()
         {
@@ -80,9 +82,23 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 m_Jump = false;
                 crouch = false;
             }
+
+
             // pass all parameters to the character control script
-            m_Character.Move(m_Move, crouch, m_Jump);
+            m_Character.Move(m_Move, crouch, m_Jump, boostSpeed);
             m_Jump = false;
+        }
+
+        public void BoostSpeed()
+        {
+            StartCoroutine(BoostSpeedTemp());
+        }
+
+        IEnumerator BoostSpeedTemp()
+        {
+            boostSpeed = boostMultiplier;
+            yield return new WaitForSeconds(7.0f);
+            boostSpeed = 1.0f;
         }
     }
 }
