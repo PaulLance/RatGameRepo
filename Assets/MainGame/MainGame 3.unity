@@ -12300,7 +12300,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 754755002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 30.248209, y: -1.2659361, z: 16.396666}
+  m_LocalPosition: {x: 31.708025, y: -1.4631348, z: 32.885742}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -16969,7 +16969,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7096818897669474396, guid: 49481a0091103964bbc89a7311e70b60, type: 3}
   m_PrefabInstance: {fileID: 7096818896707295657}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 7096818896707295658}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 51b78a31a9982e647a19a7c669cd76a0, type: 3}
@@ -33793,6 +33793,33 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 49481a0091103964bbc89a7311e70b60, type: 3}
+--- !u!1 &7096818896707295658 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7096818897669474397, guid: 49481a0091103964bbc89a7311e70b60, type: 3}
+  m_PrefabInstance: {fileID: 7096818896707295657}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7096818896707295659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7096818896707295658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97e83669afcfd1f4d87420078b0aff94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cheeseCollectClips:
+  - {fileID: 8300000, guid: bca634ed334bae64aa24e3d7abe72a64, type: 3}
+  - {fileID: 8300000, guid: 2484d68330ac8ca479cd1c7471bcdbc5, type: 3}
+  - {fileID: 8300000, guid: 0128368a020eff7489d4dd0c84a691ec, type: 3}
+  - {fileID: 8300000, guid: b6fe00d97a7c0674bb9e83273ad40312, type: 3}
+  - {fileID: 8300000, guid: f0b01f33ca9a0b04a9abbaa469446c17, type: 3}
+  - {fileID: 8300000, guid: 649e98feccb83dc4e8418e133b44c56a, type: 3}
+  laserBurnClip: {fileID: 8300000, guid: 766a15a0bdc9991459f24ea0d807cc30, type: 3}
+  mewoClip: {fileID: 8300000, guid: 1d4d21d3163ac6b458e523ae1cdaae8a, type: 3}
+  mouseTrapClip: {fileID: 8300000, guid: cc35a41a29e5e92428e84924aee73b6a, type: 3}
 --- !u!4 &7126501173707978561
 Transform:
   m_ObjectHideFlags: 0

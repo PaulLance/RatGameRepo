@@ -66,7 +66,7 @@ public class GameTeamManager
         }
     }
 
-    internal void SetTrapLocations(Vector3[] trapLocations, Trap.TrapType[] trapType)
+    public void SetTrapLocations(Vector3[] trapLocations, Trap.TrapType[] trapType)
     {
         allTraps = new Trap[trapLocations.Length];
         for (int i = 0; i < allTraps.Length; i++)
@@ -75,9 +75,10 @@ public class GameTeamManager
         }
     }
 
-    internal void CollectCheese(byte cheeseId)
+    public Cheese CollectCheese(byte cheeseId)
     {
         allCheese[cheeseId].collected = true;
         allCheese[cheeseId].cheeseObj.OnCollect();
+        return allCheese[cheeseId];
     }
 }

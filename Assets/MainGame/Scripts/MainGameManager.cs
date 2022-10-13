@@ -21,10 +21,12 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
     public Transform[] mouseTrapPositions;
     public Vector3[] mouseTrapSavedPositions;
 
-    public const int NUMBER_OF_TEAMS = 2;
+    public const int NUMBER_OF_TEAMS = 1;
     public const int PLAYERS_PER_TEAM = 4;
     public const int CHEESE_AMOUNT = 25;
-    public const int TRAPS_AMOUNT = 45;
+    Vector3 cheeseMinPos = new Vector3(16, -0.5f, 32f);
+    Vector3 cheeseMaxPos = new Vector3(16, -1.25f, 32f);
+    //public const int TRAPS_AMOUNT = 45;
 
     GameTeamManager[] gameTeamManagers;
     private bool setupDone = false;
@@ -77,7 +79,8 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
             return;
         }
 
-        gameTeamManagers[teamNum].CollectCheese(cheeseId);
+        var cheese = gameTeamManagers[teamNum].CollectCheese(cheeseId);
+        AudioManager.Instance.OnCollectCheese(cheese.position);
     }
 
 
@@ -126,7 +129,7 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
             if (pt == PlayerType.Nose)
             {
                 enableMeshRenderer = true;
-                enableTrigger = false;
+                enableTrigger = true;
             }
             else if (pt == PlayerType.Movement)
             {
@@ -136,7 +139,7 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
             else
             {
                 enableMeshRenderer = false;
-                enableTrigger = false;
+                enableTrigger = true;
             }
 
             cheeseObj.GetComponentInChildren<MeshRenderer>().enabled = enableMeshRenderer;
@@ -154,7 +157,7 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
             if (pt == PlayerType.Eyes)
             {
                 enableMeshRenderer = true;
-                enableTrigger = false;
+                enableTrigger = true;
             }
             else if(pt == PlayerType.Movement)
             {
@@ -164,7 +167,7 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
             else
             {
                 enableMeshRenderer = false;
-                enableTrigger = false;
+                enableTrigger = true;
             }
 
             var mrs = trapObj.GetComponentsInChildren<MeshRenderer>();
@@ -290,7 +293,10 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
                 Vector3[] cheeseLocations = new Vector3[CHEESE_AMOUNT];
                 for (int i = 0; i < cheeseLocations.Length; i++)
                 {
-                    cheeseLocations[i] = new Vector3(Random.Range(14.5f, 16.0f), Random.Range(-0.75f, 0.25f), Random.Range(30.5f, 32.5f));
+                    cheeseLocations[i] = new Vector3(
+                        Random.Range(cheeseMinPos.x, cheeseMaxPos.x),
+                        Random.Range(cheeseMinPos.y, cheeseMaxPos.y),
+                        Random.Range(cheeseMinPos.z, cheeseMaxPos.z));
                 }
                 //Vector3[] trapLocations = new Vector3[TRAPS_AMOUNT];
                 //byte[] trapTypes = new byte[TRAPS_AMOUNT];
