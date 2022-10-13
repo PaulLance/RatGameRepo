@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class AudioManager : MonoBehaviour
 {
@@ -40,5 +42,10 @@ public class AudioManager : MonoBehaviour
         {
             currentCheeseIndex = 0;
         }
+    }
+
+    internal void OnMouseTrap(Vector3 position)
+    {
+        AudioSource.PlayClipAtPoint(mouseTrapClip, position);
     }
 }

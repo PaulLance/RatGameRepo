@@ -184,7 +184,7 @@ void OnLevelWasLoaded(int level)
         }
         if (other.CompareTag("Trap"))
         {
-            StunSelf();
+            StunSelf(other.transform.position);
         }
         if (other.CompareTag("Boost"))
         {
@@ -205,10 +205,11 @@ void OnLevelWasLoaded(int level)
         MainGameManager.Instance.OnCollectCheese(co, TeamNum);
     }
 
-    private void StunSelf()
+    private void StunSelf(Vector3 position)
     {
         // TODO PLAY ANIMATION OF STUN!
         tpuc.isStunned = true;
+        AudioManager.Instance.OnMouseTrap(position);
         StartCoroutine(CantMove());
 
     }

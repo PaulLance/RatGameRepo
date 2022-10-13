@@ -56,7 +56,6 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         for (int i = 0; i < mouseTrapSavedPositions.Length; i++)
         {
             mouseTrapSavedPositions[i] = mouseTrapPositions[i].position;
-            Destroy(mouseTrapPositions[i].gameObject);
         }
 
     }
@@ -300,6 +299,10 @@ public class MainGameManager : MonoBehaviourPunCallbacks, IOnEventCallback
                 }
                 //Vector3[] trapLocations = new Vector3[TRAPS_AMOUNT];
                 //byte[] trapTypes = new byte[TRAPS_AMOUNT];
+                for (int i = 0; i < mouseTrapPositions.Length; i++)
+                {
+                    Destroy(mouseTrapPositions[i].gameObject);
+                }
                 Vector3[] trapLocations = new Vector3[mouseTrapSavedPositions.Length];
                 byte[] trapTypes = new byte[mouseTrapSavedPositions.Length];
                 for (int i = 0; i < trapLocations.Length; i++)
